@@ -1,0 +1,5 @@
+get-pip.py
+python3 get-pip.py
+
+from numpy import array
+import numpy as np

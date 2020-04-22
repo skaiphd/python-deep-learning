@@ -1,0 +1,821 @@
+﻿from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+data = load_breast_cancer()
+
+X=data.data
+y=data.target
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.2, stratify=y,
+                                                 random_state=1)
+
+dt= DecisionTreeClassifier(max_depth=2, random_state=1)
+
+dt.fit(X_train, y_train)
+
+y_pred= dt.predict(X_test)
+accuracy_score(y_test, y_pred)
+
+
+Decision region: region in the feature space where all instance are assigned to one class label
+
+Decision Boundary: surface separating different decision regions
+
+
+>> Logistic Regression
+
+
+from sklearn.linear_model import  LogisticRegression
+
+# Instantiate logreg
+logreg = LogisticRegression(random_state=1)
+
+# Fit logreg to the training set
+logreg.fit(X_train, y_train)
+
+# Define a list called clfs containing the two classifiers logreg and dt
+clfs = [logreg, dt]
+
+# Review the decision regions of the two classifiers
+plot_labeled_decision_regions(X_test, y_test, clfs)
+
+
+>>> decision tree
+root has no parent node and gives rise to two children nodes
+leaf has no children nodes and it makes a prediction
+nodes are grown recursively
+the nodes are split to maximize information gain and reduce entropy
+feature f at split point to get information gain
+when the information gain results from splitting a node is null, the node is declared as a leaf
+the existence of a node depends on the state of its predecessors
+
+
+dt=DecisionTreeClassifier(criterion='gini', random_state=1)
+or
+dt_entropy = DecisionTreeClassifier(max_depth=8, criterion='entropy', random_state=1)
+
+dt.fit(X_train, y_train)
+y_pred=dt.predict(X_test)
+
+>>
+
+# Import accuracy_score from sklearn.metrics
+from sklearn.metrics import accuracy_score
+
+# Use dt_entropy to predict test set labels
+y_pred= dt_entropy.predict(X_test)
+
+# Evaluate accuracy_entropy
+accuracy_entropy = accuracy_score(y_test, y_pred)
+
+# Print accuracy_entropy
+print('Accuracy achieved by using entropy: ', accuracy_entropy)
+
+# Print accuracy_gini
+print('Accuracy achieved by using the gini index: ', accuracy_gini)
+
+accuracy_score(y_test,y_pred)
+
+>>Decision Tree Regressor
+
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error as MSE
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.2, stratify=y,
+                                                 random_state=3)
+
+dt=DecisionTreeRegressor(max_depth=4,
+	min_samples_leaf=0.1,  #each leaf must contain 10% of the training data
+	random_state=3)
+
+dt.fit(X_train, y_train)
+3
+y_pred=dt.predict(X_test)
+
+mse_dt=MSE(y_test,y_pred)
+rmse_dt=mse_dt**(1/2)
+
+
+
+
+print(rmse_dt)
+
+>>What is root mean squared error?
+Root Mean Square Error (RMSE) is the standard deviation of the residuals (prediction errors). Residuals are a measure of how far from the regression line data points are; RMSE is a measure of how spread out these residuals are. In other words, it tells you how concentrated the data is around the line of best fit. Root mean square error is commonly used in climatology, forecasting, and regression analysis to verify experimental results. 
+
+
+>>Find the function f hat where noise is discarded as much as possible
+>>Achieve an low predictive error on unseen datasets
+>>Overfitting occurs when f hat fits the noise.  Overfitting reduces the ability for the model to accurate predict on unknown sets.
+>>Generalization error of f hat tells you how well it generalizes on unseen data
+f hat= bias + variance + irreducible error
+bias tells you, on average how different f hat and f differ. high bias models lead to underfitting.
+variance tells you how f hat is inconsistent over different training sets.
+high variance models lead to overfitting.
+increasing the maximum tree depth increases the complexity of a tree
+as model complexity increases, the variance increases while the bias decreases.
+the irreduciblity error is constant
+
+low variance and low bias then the function is accurate
+high variance and low bias means that the function is overshooting the target picking up the noise
+
+>>bias
+how do you estimate the generalization error of a model
+split to training and test set.
+the generalization error is estimated to be the training set error.
+cross validation is used to determine confidence on the data sets performance
+K-Fold CV
+a. training set is split into 10 partitions or folds
+b. the error on f hat is evaluated 10 times on the 10 folds
+c. CV error is the mean of the 10 errors
+d. if CV error is higher than training set error of f hat than high variance occurs.  high variance means f hat has overfit the training set.
+
+to remedy overfitting
+a. decrease model complexity
+b. decrease max depth
+c. increase min samples per leaf
+
+
+f hat suffers from high bias when f hat training set error > desired error
+a. increase model complexity
+b. increase depth
+c. decrease minimum samples per leaf
+d. gather more relevant features
+
+
+
+>>>>K-Fold cv
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score 
+from sklearn.model_selection import cross_val_score
+
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.3, stratify=y,
+                                                 random_state=1)
+SEED=123
+dt=DecisionTreeRegressor(max_depth=4,
+	min_samples_leaf=0.14,  #each leaf must contain 10% of the training data
+	random_state=SEED)
+
+MSE_CV= -cross_val_score(dt,X_train,y_train, cv=10,scoring='neg_mean_squared_error', n_jobs=-1)
+
+dt.fit(X_train, y_train)
+
+y_pred_train=dt.predict(X_train)
+y_pred_test=dt.predict(X_test)
+
+print('CV MSE: {:.2f}'.format(MSE_CV.mean()))
+
+print('Train MSE: {:.2f}'.format(MSE(MSE(y_train,y_predict_train)).mean()))
+print('Test MSE: {:.2f}'.format(MSE(MSE(y_test,y_predict_test)).mean()))
+
+if training mse < cv mse then dt overfits the training set resulting in high variance
+
+>>
+
+MSE_CV_scores = - cross_val_score(dt, X_train, y_train, cv=10, 
+                                  scoring='neg_mean_squared_error', 
+                                  n_jobs=-1) 
+
+# Compute the 10-folds CV RMSE
+RMSE_CV = (MSE_CV_scores.mean())**(1/2)
+
+# Print RMSE_CV
+print('CV RMSE: {:.2f}'.format(RMSE_CV))
+
+
+>>evaluate the training set RMSE achieved by the regression tree dt
+
+from sklearn.metrics import mean_squared_error as MSE
+
+# Fit dt to the training set
+dt.fit(X_train,y_train)
+
+# Predict the labels of the training set
+y_predict_train =dt.predict(X_train)
+
+# Evaluate the training set RMSE of dt
+RMSEMSE_train = (MSE(y_train, y_predict_train))**(1/2)
+
+# Print RMSE_train
+print('Train RMSE: {:.2f}'.format(RMSE_train))
+
+>>dt suffers from high bias because RMSE_CV ≈≈ RMSE_train and both scores are greater than baseline_RMSE (results in underfitting)
+
+
+>>>CARTS
+
+simple to understand, simple to intrepret, easy to use, describes non-linear dependencies, no need to standardize or normalize features.
+
+carts are sensitive to small variations in the training set.
+
+high variance unconstrained CARTS may overfit the training set
+
+
+>>Ensembled learning
+
+1. Different models are trained on the same dataset
+2. Each model makes it own predictions
+3. meta model aggregates predictions of individual models
+4. final prediction is outputted
+
+
+SEED=1
+
+# Instantiate lr
+lr = LogisticRegression(random_state=SEED)
+
+# Instantiate knn
+knn = KNN(n_neighbors=27)
+
+# Instantiate dt
+dt = DecisionTreeClassifier(min_samples_leaf=1.3, random_state=SEED)
+
+# Define the list classifiers
+classifiers = [('Logistic Regression', lr), ('K Nearest Neighbours', knn), ('Classification Tree', dt)]
+
+for clf_name, clf in classifiers:    
+  
+    # Fit clf to the training set
+    clf.fit(X_train, y_train)    
+  
+    # Predict y_pred
+    y_pred = clf.predict(X_test)
+    
+    # Calculate accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+  
+    # Evaluate clf's accuracy on the test set
+    print('{:s} : {:.3f}'.format(clf_name, accuracy))
+
+
+>>Voting classifiers
+
+from sklearn.ensemble import VotingClassifier
+
+# Instantiate a VotingClassifier vc 
+vc = VotingClassifier(estimators=classifiers)     
+
+# Fit vc to the training set
+vc.fit(X_train, y_train)   
+
+# Evaluate the test set predictions
+y_pred = vc.predict(X_test)
+
+# Calculate accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+    print('{:s} : {:.3f}'.format(clf_name, accuracy))
+
+>>Bagging (Classification )
+
+Bootstrap Aggregation
+
+Each model is training on a different part of the training set.
+
+It Reduces variance of individual models in the ensemble
+
+assume original set a,b,c then the bootstrap sample can be [b,b,b] or [a,b,a] or [a,c,c]
+
+Classification:
+The BaggingClassifier outputs a prediction by voting of its models
+
+Regression:
+BaggingRegressor outputs a prediction of the averages
+
+
+from sklearn.ensemble import BaggingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+SEED=1
+
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.3, stratify=y,
+                                                 random_state=SEED)
+
+
+dt = DecisionTreeClassifier(max_depth=4, min_samples_leaf=1.6, random_state=SEED)
+
+bc=BaggingClassifier(base_estimator=dt, n_estimators=300, n_jobs=-1)
+
+
+bc.fit(X_train, y_train)   
+
+# Evaluate the test set predictions
+y_pred = bc.predict(X_test)
+
+# Calculate accuracy score
+accuracy = accuracy_score(y_test, y_pred)
+    print('{:s} : {:.3f}'.format(clf_name, accuracy))
+
+>>Bagging improves accuracy
+
+>>>Out of Bag evaluation
+ >>in bagging some instances may not be sampled at all
+>>on the average 63% of the training instances are sampled, the remaining 37% constitute the out of bag instances
+
+The model is evaluated on the out of bag instances
+
+the oob score is an average of the models oob score
+
+from sklearn.ensemble import BaggingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+
+SEED=1
+
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.3, stratify=y,
+                                                 random_state=SEED)
+
+dt = DecisionTreeClassifier(max_depth=4, min_samples_leaf=1.6, random_state=SEED)
+
+bc=BaggingClassifier(base_estimator=dt, n_estimators=300, n_jobs=-1, oob_score=True)  
+
+#oob score equates to accuracy for classifiers and r squared for regressors
+
+bc.fit(X_train, y_train)   
+
+y_pred = bc.predict(X_test)
+
+test_accuracy=accuracy_score(y_test, y_pred)
+
+oob_accuracy=bc.oob_score_
+
+print('Test set accuracy: {:.3f}'.format(test_accuracy))
+print('Oob accuracy: {:.3f}'.format(oob_accuracy))
+
+>>comparing oob accuracy with sampling accuracy
+bc.fit(X_train, y_train)
+
+# Predict test set labels
+y_pred = bc.predict(X_test)
+
+# Evaluate test set accuracy
+acc_test = accuracy_score(y_test,y_pred)
+
+# Evaluate OOB accuracy
+acc_oob = bc.oob_score_
+
+# Print acc_test and acc_oob
+print('Test set accuracy: {:.3f}, OOB accuracy: {:.3f}'.format(acc_test, acc_oob))
+
+
+>>Random Forest
+
+1.  The base estimator is a decision tree
+2.  Each estimator is trained on a different bootstrap sample having the same size as the training set
+3.  Random forrest introduces randomization in the training of individual trees
+4.  When the tree is trained the d features can be sampled at each node without replacement where (d<total number of features)
+5.  Each tree is trained on a different sample from the training set
+
+d= the sqrt(features)  if there are 100 features then 10 samples are used.
+
+when a new instance if feed to the decision tree, each tree outputs a prediction,  the random forests collect the predictions and output a final prediction dependant upon the nature of the problem.
+the final prediction is made by majority voting.
+
+
+Random Forest
+
+Classification: RandomForestClassifier
+
+Regression: RandomForestRegressor
+
+
+rf=RandomForestRegressor(n_estimators=400,min_sample_leaf=0.12, Random_state=SEED)
+
+rf.fit(X_train, y_train)
+y_pred=rf.predict(X_test)
+rmse_test=MSE(y_test, y_pred)**(1/2)
+print('Test set RMSE of rf: {:.2f}'.format(rmse_test))
+
+
+feature importance is assessed by how much the tree nodes use a particular feature (weighted average) to reduce impurity
+
+rf.feature_importance_  tells you the importance of the feature
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+importances = pd.Series(data=rf.feature_importances_,
+                        index= X_train.columns)
+
+# Sort importances
+sort_importances_rf=importances.sort_values()
+
+# Draw a horizontal barplot of importances_sorted
+sort_importances_rf.plot(kind='barh', color='lightgreen');
+plt.title('Features Importances')
+plt.show()
+
+
+>>RandomForestRegressor
+
+# Import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error as MSE
+
+# Instantiate rf
+rf = RandomForestRegressor(n_estimators=25,
+            random_state=2)
+            
+# Fit rf to the training set    
+rf.fit(X_train,y_train) 
+
+y_pred = rf.predict(X_test)
+
+# Evaluate the test set RMSE
+rmse_test = MSE(y_test,y_pred)**(1/2)
+
+# Print rmse_test
+print('Test set RMSE of rf: {:.2f}'.format(rmse_test))
+
+
+The RMSE is the square root of the variance of the residuals. It indicates the absolute fit of the model to the data–how close the observed data points are to the model’s predicted values. Whereas R-squared is a relative measure of fit, RMSE is an absolute measure of fit. As the square root of a variance, RMSE can be interpreted as the standard deviation of the unexplained variance, and has the useful property of being in the same units as the response variable. Lower values of RMSE indicate better fit. RMSE is a good measure of how accurately the model predicts the response, and it is the most important criterion for fit if the main purpose of the model is prediction.
+
+
+>>Boosting
+
+1. Each predictor learns for the errors of its predecessor
+2. Many weak learners are combined to form a strong learner
+
+Adaboost
+and gradient boost
+
+Adaboost
+1. Each predictor pay more attention to the instances wrongly predicted by its predecessor
+2. Achieved by changing the weights of training instances
+3. Each predictor is assigned a coefficient alpha
+4. Alpha depends on the predictors training error
+
+
+The learning rate 0<eta<=1, eta is used to shrink the weights of alpha on a trained predictor
+
+A smaller value of eta should be compensated by a greater number of estimators
+
+Classification:
+Weighted majority voting
+AdaBoostClassifier
+
+Regression:
+Weighted average
+AdaBoostRegressor
+
+
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error as MSE
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
+
+SEED=1
+
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.3, stratify=y,
+                                                 random_state=SEED)
+
+dt = DecisionTreeClassifier(max_depth=1, random_state=SEED)
+
+adb_clf= AdaBoostClassifier(base_estimator=dt, n_estimators=100)  #a stump is a tree whose depth is 1
+
+adb_clf.fit(X_train, y_train)
+
+#predict the probablity of obtaining the positive class in the test set
+
+y_pred_proba=adb_clf.predict_proba(X_test)[:,1]
+
+adb_clf_roc_auc_score=roc_auc_score(y_test, y_pred_proba)
+
+print('ROC AUC score: {:.2f}'.format(adb_clf_roc_auc_score))
+
+
+>>adboostclassifier
+
+# Import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+# Import AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier
+
+# Instantiate dt
+dt = DecisionTreeClassifier(max_depth=2, random_state=SEED)
+
+# Instantiate ada
+ada= AdaBoostClassifier(base_estimator=dt, n_estimators=180,random_state=1)
+
+ada.fit(X_train,y_train)
+
+# Compute the probabilities of obtaining the positive class
+y_pred_proba=ada.predict_proba(X_test)[:,1]
+
+from sklearn.metrics import roc_auc_score
+
+# Evaluate test-set roc_auc_score
+ada_roc_auc = roc_auc_score(y_test, y_pred_proba)
+
+# Print roc_auc_score
+print('ROC AUC score: {:.2f}'.format(ada_roc_auc))
+
+>>Gradient boosting
+
+1) Sequential correction of predecessors errors
+2) Does not tweak the weights of training instances
+3) Fit each predictor is trained using its precessors residual errors as labels
+4) Shrinkage occurs as errors are reduced between each new tree in the lineage line
+5) Decreasing the learning rate must be compensated by increasing the number of estimators
+
+>>Regression
+GradientBoostingRegressor
+
+>>Classification
+GradientBoostingClassifier
+
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error as MSE
+from sklearn.model_selection import train_test_split
+
+SEED=1
+
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.3, stratify=y,
+                                                 random_state=SEED)
+
+gbt=GradientBoostingRegressor(n_estimators=300, max_depth=1, random_state=SEED)
+
+gbt.fit(X_train,y_train) 
+
+y_pred = gbt.predict(X_test)
+
+# Evaluate the test set RMSE
+rmse_test = MSE(y_test,y_pred)**(1/2)
+
+print('Test set RMSE:{:.2f}'.format(rmse_test)
+
+
+>>compute mse and compute rmse
+
+# Compute MSE
+mse_test = MSE(y_test, y_pred)
+
+# Compute RMSE
+rmse_test = mse_test**(1/2)
+
+# Print RMSE
+print('Test set RMSE of gb: {:.3f}'.format(rmse_test))
+
+>>Stochastic Gradient Boosting
+1. GB involves exhaustive search procedures
+2. CART is trained to find the best split points and features
+3. May lead to CARTS using the same split points and maybe the same features
+
+SGB
+1. Each tree is trained on a random subset of the rows of the training data.
+2. The sampled instances are 40% to 80% of the training set without replacement
+3. creates further diversity in the ensemble
+4. only a small set of the training data is used to determine if a tree is to be split. once the tree is trained, predictions are made and residuals errors are computed.
+The residual errors are mulitipled by the learning rating and fed to the next tree in the ensemble.  The procedures is repeated until all trees in the ensemble are trained.
+
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error as MSE
+from sklearn.model_selection import train_test_split
+
+
+
+SEED=1
+
+
+X_train, X_test, y_train, y_test=train_test_split(X,y, test_size=0.3, stratify=y,
+                                                 random_state=SEED)
+
+gbt=GradientBoostingRegressor(
+n_estimators=300, 
+subsample=0.8,  #sample 80% of the data for training
+max_features=0.2, #use 20% of the features to perform best fit
+max_depth=1, 
+random_state=SEED)
+
+gbt.fit(X_train,y_train) 
+
+y_pred = gbt.predict(X_test)
+
+# Evaluate the test set RMSE
+rmse_test = MSE(y_test,y_pred)**(1/2)
+
+print('Test set RMSE:{:.2f}'.format(rmse_test)
+
+
+>>
+sgbr = GradientBoostingRegressor(max_depth=4, 
+            subsample=.9,
+            max_features=.75,
+            n_estimators=200,                                
+            random_state=2)
+
+# Fit sgbr to the training set
+
+sgbr.fit(X_train,y_train) 
+
+# Predict test set labels
+y_pred = sgbr.predict(X_test)
+
+# Compute test set MSE
+mse_test = MSE(y_test,y_pred)
+
+# Compute test set RMSE
+rmse_test = mse_test**(1/2)
+
+# Print rmse_test
+print('Test set RMSE of sgbr: {:.3f}'.format(rmse_test))
+
+
+>>hyperparameters are not learned from data and should be set prior to training
+>>searching for the optimal hyperparamers that results in an optimal model
+>>an optimal model yields and optimal score (accuracy in classification and r2 for regression)
+>>cross validation is used to estimate the generalization performance
+
+Grid Search
+
+dt = DecisionTreeClassifier(max_depth=4, min_samples_leaf=1.6, random_state=SEED)
+
+print(dt.get_params()) #prints the hyper parameters list
+
+
+from sklearn.model_selection import GridSearchCV
+
+params_dt={
+'max_depth':[3,4,5,6],
+'min_samples_leaf': [0.04,0.06,0.08],
+'max_features':[0.2,0.4,0.6,0.8]
+}
+
+
+
+grid_dt=GridSearchCV(estimator=dt, param_grid=params_dt,scoring='accuracy',cv=10,n_jobs=-1)
+
+
+ grid_dt.fit(X_train,y_train)
+best_hyperparams=grid_dt.best_params_
+print('Best hyperparameters:\n',best_hyperparams)
+
+best_CV_score= grid_dt.best_score_
+print('Best CV accuracy'.format(best_CV_score))
+
+best_model=grid_dt.best_estimator_
+
+
+test_acc=best_model.score(X_test,y_test)
+print("Test set accuracy of best model: {:.3f}'.format(test_acc))
+
+
+>>GridSearchCV
+
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import roc_auc_score
+
+
+dt = DecisionTreeClassifier(max_depth=4, min_samples_leaf=1.6, random_state=SEED)
+
+print(dt.get_params()) #prints the hyper parameters list
+
+params_dt={
+'max_depth':[3,4,5,6],
+'min_samples_leaf': [0.04,0.06,0.08],
+'max_features':[0.2,0.4,0.6,0.8]
+}
+
+
+# Instantiate grid_dt
+grid_dt = GridSearchCV(estimator=dt,
+                       param_grid=params_dt,
+                       scoring='roc_auc',
+                       cv=5,
+                       n_jobs=-1) 
+
+
+# Extract the best estimator
+best_model = grid_dt.best_estimator_
+
+# Predict the test set probabilities of the positive class
+y_pred_proba = best_model.predict_proba(X_test)[:,1]
+
+# Compute test_roc_auc
+test_roc_auc = roc_auc_score(y_test, y_pred_proba)
+
+# Print test_roc_auc
+print('Test set ROC AUC score: {:.3f}'.format(test_roc_auc))
+
+>>hyperparameter tuning is computationally expensive and may only lead to slight improvement
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error as MSE
+from sklearn.model_selection import GridSearchCV
+
+# Instantiate rf
+rf = RandomForestRegressor(random_state=2)
+
+params_rf2={
+'n_estimators':[100,350,500],
+'min_samples_leaf':[2,10,30],
+'max_features':['log2','sqrt']
+}
+
+params_rf={
+'n_estimators':[300,400,500],
+'max_depth': [4,6,8],
+'min_samples_leaf':[0.1,0.2],
+'max_features':['log2','sqrt']
+}
+            
+grid_rf = GridSearchCV(estimator=rf,
+                       param_grid=params_rf,
+                       scoring='neg_mean_squared_error',
+                       cv=3,
+		       verbose=1
+                       n_jobs=-1) 
+
+# Fit rf to the training set    
+grid_rf.fit(X_train,y_train) 
+
+best_hyperparams=grid_rf.best_params_
+print('Best hyperparameters:\n', best_hyperparams)
+
+
+best_model = grid_rf.best_estimator_
+
+y_pred = best_model.predict(X_test)
+
+# Evaluate the test set RMSE
+rmse_test = MSE(y_test,y_pred)**(1/2)
+
+# Print rmse_test
+print('Test set RMSE of rf: {:.2f}'.format(rmse_test))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

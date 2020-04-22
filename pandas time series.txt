@@ -1,0 +1,402 @@
+How to plot data without a date
+
+data={'key':[0,1,2,3],'data_values':[100,150,400,200]}
+data=pd.DataFrame(data)
+data2={'key':[0,1,2,3],'data_values':[45,98,200,300]}
+data2=pd.DataFrame(data2)
+data.set_index('key')
+data2.set_index('key')
+print(data)
+
+fig, axs = plt.subplots(2,1, figsize=(5,10))
+data.iloc[:,1].plot(y='data_values',ax=axs[0])
+data2.iloc[:,1].plot(y='data_values',ax=axs[1])
+plt.show()
+
+
+>>adding an x time stamp
+
+data={'time':['2020-04-01','2020-04-02','2020-04-03','2020-04-04'],'data_values':[100,150,400,200]}
+data=pd.DataFrame(data)
+data2={'time':['2020-04-01','2020-04-02','2020-04-03','2020-04-04'],'data_values':[45,98,200,300]}
+data2=pd.DataFrame(data2)
+data.set_index('time')
+data2.set_index('time')
+print(data)
+
+fig, axs = plt.subplots(2,1, figsize=(5,10))
+data.plot(x='time',y='data_values',ax=axs[0])
+data2.plot(x='time', y='data_values',ax=axs[1])
+plt.show()
+
+
+>>Shaping data
+
+array.T.shape (transpose the data)
+array.reshape([-1,1]).shape (-1 will automatically fill the axis with the remaining values)
+
+model=LinearSVC()
+model.fit(X,y)
+model.coef
+
+predictions=model.predict(X_Test)
+
+array=np.array([1,2,3,4,5,6])
+array=array.reshape(2,3)
+print(array)
+
+>>iris prediction
+
+from sklearn.svm import LinearSVC
+
+# Construct data for the model
+X = data[["petal length (cm)","petal width (cm)"]]
+y = data[['target']]
+
+# Fit the model
+model = LinearSVC()
+model.fit(X, y)
+
+# Create input array
+X_predict = targets[['petal length (cm)', 'petal width (cm)']]
+
+# Predict with the model
+predictions =model.predict(X_predict)
+print(predictions)
+
+# Visualize predictions and actual values
+plt.scatter(X_predict['petal length (cm)'], X_predict['petal width (cm)'],
+            c=predictions, cmap=plt.cm.coolwarm)
+plt.title("Predicted class values")
+plt.show()
+
+
+>>linear regression
+
+from sklearn import linear_model
+
+# Prepare input and output DataFrames
+X = boston[['AGE']]
+y = boston[['RM']]
+
+# Fit the model
+model = linear_model.LinearRegression()
+model.fit(X, y)
+
+print(new_inputs.reshape(-1,1))
+predictions = model.predict(new_inputs.reshape(-1,1))
+
+# Visualize the inputs and predicted values
+plt.scatter(new_inputs, predictions, color='r', s=3)
+plt.xlabel('inputs')
+plt.ylabel('predictions')
+plt.show()
+
+
+>>generating time
+
+generates 11 numbers 
+
+indices=np.arange(0,10)  
+print(indices)
+
+creates 10 evenly spaced numbers starting with 1 and ending with 10
+print(np.linspace(1,10,10))
+
+
+import librosa as lr
+from glob import glob
+
+# List all the wav files in the folder
+audio_files = glob(data_dir + '/*.wav')
+
+# Read in the first audio file, create the time array
+audio, sfreq = lr.load(audio_files[0])
+time = np.arange(0, len(audio)) / sfreq
+
+
+# Plot audio over time
+fig, ax = plt.subplots()
+ax.plot(time, audio)
+ax.set(xlabel='Time (s)', ylabel='Sound Amplitude')
+plt.show()
+
+
+
+>>>read in stock prices per year
+
+# Read in the data
+data = pd.read_csv('prices.csv', index_col=0)
+
+# Convert the index of the DataFrame to datetime
+data.index = pd.to_datetime(data.index)
+print(data.head())
+
+# Loop through each column, plot its values over time
+fig, ax = plt.subplots()
+for column in data:
+    data[column].plot(ax=ax, label=column)
+ax.legend()
+plt.show()
+
+>>classification and feature engineering
+
+
+from sklearn.svm import LinearSVC
+
+X=np.column_stack([means,maxs,stds])
+y=labels.reshape([-1,1])
+model=LinearSVC()
+model.fit(X,y)
+
+predictions=model.predict(X_test)
+
+percent_score= sum(predictions==labels_test)/len(labels_test)
+percent_score= accuracy_score(labels_test,predictions)
+
+
+>>heartbeat analysis
+
+fig, axs = plt.subplots(3, 2, figsize=(15, 7), sharex=True, sharey=True)
+
+# Calculate the time array
+time = np.arange(normal.shape[0]) / sfreq
+
+# Stack the normal/abnormal audio so you can loop and plot
+stacked_audio = np.hstack([normal, abnormal]).T
+
+# Loop through each audio file / ax object and plot
+# .T.ravel() transposes the array, then unravels it into a 1-D vector for looping
+for iaudio, ax in zip(stacked_audio, axs.T.ravel()):
+    ax.plot(time, iaudio)
+show_plot_and_make_titles()
+
+>>using the mean to smooth the noise
+
+mean_normal = np.mean(normal, axis=1)
+mean_abnormal = np.mean(abnormal, axis=1)
+
+# Plot each average over time
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 3), sharey=True)
+ax1.plot(time, mean_normal)
+ax1.set(title="Normal Data")
+ax2.plot(time, mean_abnormal)
+ax2.set(title="Abnormal Data")
+plt.show()
+
+>>Test the data
+
+from sklearn.svm import LinearSVC
+
+# Initialize and fit the model
+model = LinearSVC()
+model.fit(X_train,y_train)
+
+# Generate predictions and score them manually
+predictions = model.predict(X_test)
+print(sum(predictions == y_test.squeeze()) / len(y_test))
+
+>>Smoothing signal
+
+# Rectify the audio signal
+audio_rectified = audio.apply(np.abs)
+
+# Plot the result
+# figsize parameter 1 is the width and parameter 2 is the height
+audio_rectified.plot(figsize=(10, 5))
+plt.show() 
+
+>>Rolling and mean
+
+# Smooth by applying a rolling mean
+audio_rectified_smooth = audio_rectified.rolling(50).mean()
+
+# Plot the result
+audio_rectified_smooth.plot(figsize=(10, 5))
+plt.show()
+
+
+>>cross_val_score
+
+means = np.mean(audio_rectified_smooth, axis=0)
+stds = np.std(audio_rectified_smooth, axis=0)
+maxs = np.max(audio_rectified_smooth, axis=0)
+
+# Create the X and y arrays
+X = np.column_stack([means, stds, maxs])
+y = labels.reshape([-1, 1])
+
+# Fit the model and score on testing data
+from sklearn.model_selection import cross_val_score
+percent_score = cross_val_score(model, X, y, cv=5)
+print(np.mean(percent_score))
+print(percent_score)
+
+>>tempo
+
+tempos = []
+for col, i_audio in audio.items():
+    tempos.append(lr.beat.tempo(i_audio.values, sr=sfreq, hop_length=2**6, aggregate=None))
+
+# Convert the list to an array so you can manipulate it more easily
+tempos = np.array(tempos)
+
+# Calculate statistics of each tempo
+tempos_mean = tempos.mean(axis=-1)
+tempos_std = tempos.std(axis=-1)
+tempos_max = tempos.max(axis=-1)
+
+>> column_stack
+
+# Create the X and y arrays
+X = np.column_stack([means, stds, maxs, tempos_mean, tempos_std, tempos_max])
+y = labels.reshape([-1, 1])
+
+# Fit the model and score on testing data
+percent_score = cross_val_score(model, X, y, cv=5)
+print(np.mean(percent_score))
+
+
+
+>> converting date index to a datetime
+
+diet.index = pd.to_datetime(diet.index)
+
+>> grid=True
+
+diet.index = pd.to_datetime(diet.index)
+
+# Plot the entire time series diet and show gridlines
+diet.plot(grid=True)
+plt.show()
+
+>>filter on index
+
+diet.index = pd.to_datetime(diet.index)
+
+# Slice the dataset to keep only 2012
+diet2012 = diet['2012']
+
+# Plot 2012 data
+diet2012.plot(grid=True)
+plt.show()
+
+>>Differences between two sets of dates
+
+set_stock_dates = set(stocks.index)
+set_bond_dates = set(bonds.index)
+
+
+differences=set_stock_dates - set_bond_dates
+# Take the difference between the sets and print
+print(differences)
+
+# Merge stocks and bonds DataFrames using join()
+stocks_and_bonds = stocks.join(bonds, how='inner')
+
+
+>>Correlation between two variables
+
+# Compute percent change using pct_change()
+returns = stocks_and_bonds.pct_change()
+
+# Compute correlation using corr()
+correlation = returns['SP500'].corr(returns['US10Y'])
+print("Correlation of stocks and interest rates: ", correlation)
+
+# Make scatter plot
+plt.scatter(returns['SP500'],returns['US10Y'])
+plt.show()
+
+
+>> linear regression is known as OLS ordinary least squares
+It minimizes distances to a sloping regression line
+
+import statsmodel.api as sm
+
+sm.OLS(y,x).fit()
+
+
+coef is the slope of the equation, const is the intercept, R-squared is the line fit to the data.
+if the slope is positive then the correlation is positive
+
+correlation= square root (R squared)
+
+R-squared measures how closely the data fit the regression line, so the R-squared in a simple regression is related to the correlation between the two variables. In particular, the magnitude of the correlation is the square root of the R-squared and the sign of the correlation is the sign of the regression coefficient.
+
+Most linear regressions contain a constant term which is the intercept (the a in the regression yt=a+ßxt+?t). To include a constant using the function OLS(), you need to add a column of 1's to the right hand side of the regression.
+
+>> correlation and ols
+
+# Import the statsmodels module
+import statsmodels.api as sm
+
+# Compute correlation of x and y
+correlation = x.corr(y)
+print("The correlation between x and y is %4.2f" %(correlation))
+
+# Convert the Series x to a DataFrame and name the column x
+dfx = pd.DataFrame(x, columns=['x'])
+
+# Add a constant to the DataFrame dfx
+dfx1 = sm.add_constant(dfx)
+
+# Regress y on dfx1
+result = sm.OLS(y,dfx1).fit()
+
+plt.scatter(x,y)
+plt.show()
+
+# Print out the results and look at the relationship between R-squared and the correlation above
+print(result.summary())
+
+
+>>auto correlation
+Momentum or trend following - positive correlation
+Traders use autocorrelation to make money
+
+df.index=pd.to_datetime(df.index)
+df=df.resample(rule='M', how='last')
+df['Return']=df['Price'].pct_change()
+autocorrelation=df['Return'].autocorr()
+print('The autocorrelation is", autocorrelation)
+
+>>auto correlation and pct_change
+
+# Convert the daily data to weekly data
+MSFT = MSFT.resample(rule='W', how='last')
+
+# Compute the percentage change of prices
+returns = MSFT.pct_change()
+
+# Compute and print the autocorrelation of returns
+autocorrelation = returns['Adj Close'].autocorr()
+print("The autocorrelation of weekly returns is %4.2f" %(autocorrelation))
+
+>>autocorrelate using diff
+
+print(daily_rates)
+# Compute the daily change in interest rates 
+import matplotlib.pyplot as plt
+
+daily_diff = daily_rates.diff()
+
+X=daily_rates['US10Y'].rolling(100).mean().tolist()
+Y=pd.to_datetime(daily_rates.index)
+
+plt.scatter(X,Y)
+plt.show()
+print(daily_diff)
+
+# Compute and print the autocorrelation of daily changes
+autocorrelation_daily = daily_diff['US10Y'].autocorr()
+
+
+
+
+
+
+
+
+
+

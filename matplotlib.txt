@@ -1,0 +1,400 @@
+import matplotlib.pyplot as plt
+
+
+df = pd.read_sql(query, connection)
+print(df.head(5))
+
+amounts=df.groupby(['Year','Category'])['Amount'].sum().tolist()
+years=df.groupby(['Year','Category'])['Year'].min().tolist()
+
+print(amounts)
+print(years)
+plt.clf()
+fig, ax = plt.subplots()
+ax.scatter(years,amounts)
+plt.show()
+
+
+>>customize
+ax.plot(x,y,
+marker="o"
+or
+marker="v",
+
+linestyle="--" #means dashed
+linestyle="none" #no lines
+color="r" #line color is red
+)
+
+ax.set_xlabel("Time (months)")
+
+ax.set_ylabel("Average temperature")
+ax.set_title("Weather in Seattle")
+
+
+>>line style
+
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-NORMAL"], color='r',marker='o',linestyle='--')
+
+# Plot Austin data, setting data appearance
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-NORMAL"], color='b',marker='v',linestyle='--')
+
+# Call show to display the resulting plot
+plt.show()
+
+
+>>Small multiples
+
+fig, ax= plt.subplots(3,2)  #three rows of subplots and two columns
+
+ax[0,0].plot(seattle_weather['month'], seattle_weather['mly-prcp-normal'],color='b')
+
+
+>>special case
+fig, ax=plt.subplots(2,1)
+
+ax[0].plot(...)
+ax[1].plot(...)
+
+ax[1].set_xlabel applies to both index=0 and index=1
+
+sharey=True means the both subplots will have the same number of y elements
+
+# Create a Figure and an array of subplots with 2 rows and 2 columns
+fig, ax = plt.subplots(2, 2)
+
+# Addressing the top left Axes as index 0, 0, plot month and Seattle precipitation
+ax[0, 0].plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-NORMAL"])
+
+# In the top right (index 0,1), plot month and Seattle temperatures
+ax[0, 1].plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"])
+
+# In the bottom left (1, 0) plot month and Austin precipitations
+ax[1, 0].plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-NORMAL"])
+
+# In the bottom right (1, 1) plot month and Austin temperatures
+ax[1, 1].plot(austin_weather["MONTH"], austin_weather["MLY-TAVG-NORMAL"])
+plt.show()
+
+
+>>guides
+
+fig, ax = plt.subplots(2, 1, sharey=True)
+
+# Plot Seattle precipitation data in the top axes
+ax[0].plot(seattle_weather['MONTH'], seattle_weather['MLY-PRCP-NORMAL'], color = 'r')
+ax[0].plot(seattle_weather['MONTH'], seattle_weather['MLY-PRCP-25PCTL'], color = 'r', linestyle = '--')
+ax[0].plot(seattle_weather['MONTH'], seattle_weather['MLY-PRCP-75PCTL'], color = 'r', linestyle = '--')
+
+# Plot Austin precipitation data in the bottom axes
+ax[1].plot(austin_weather['MONTH'], austin_weather['MLY-PRCP-NORMAL'], color = 'b')
+ax[1].plot(austin_weather['MONTH'], austin_weather['MLY-PRCP-25PCTL'], color = 'b', linestyle = '--')
+ax[1].plot(austin_weather['MONTH'], austin_weather['MLY-PRCP-75PCTL'], color = 'b', linestyle = '--')
+
+plt.show()
+
+>>time series data
+
+
+climate_change.index
+
+climate_change['relative_temp']  #variation for the 10 year average temperature
+climate_change['co2']
+
+fig, ax= plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'])
+ax.set_xlabel('time')
+ax.set_ylabel('co2 ppm')
+plt.show()
+
+sixties= climate_change['1960-01-01':'1969-12-31']
+
+
+>>
+# Import pandas as pd
+import pandas as pd
+
+# Read the data from file using read_csv
+climate_change = pd.read_csv('climate_change.csv', parse_dates=True, index_col='date')
+
+print(climate_change.head(5))
+
+>>
+
+import matplotlib.pyplot as plt
+
+# Use plt.subplots to create fig and ax
+fig, ax= plt.subplots()
+
+# Create variable seventies with data from "1970-01-01" to "1979-12-31"
+seventies = climate_change["1970-01-01" : "1979-12-31"]
+
+# Add the time-series for "co2" data from seventies to the plot
+ax.plot(seventies.index, seventies["co2"])
+
+plt.show()
+
+>> creating a twin axis - both share the same x axis
+
+fig, ax= plt.subplots()
+ax.plot(climate_change.index, climate_change['co2'], color=blue)
+ax.set_xlabel('time')
+ax.set_ylabel('co2 ppm')
+ax.tick_params('y',colors='blue')
+
+ax2=ax.twinx()
+ax2.plot(climate_change.index, climate_change['relative_temp'], color=red)
+ax2.set_ylabel('relative temp(celsius)')
+ax2.tick_params('y',colors='red')
+plt.show()
+
+>>create a function
+
+def plot_timeseries(axes, x, y, color, xlabel, ylabel):
+
+  # Plot the inputs x,y in the provided color
+  axes.plot(x, y, color=color)
+
+  # Set the x-axis label
+  axes.set_xlabel(xlabel)
+
+  # Set the y-axis label
+  axes.set_ylabel(ylabel, color=color)
+
+>>calling the function
+plot_timeseries(ax,climate_change.index,climate_change['co2'], "blue", "Time (years)", "CO2 levels")
+
+# Create a twin Axes object that shares the x-axis
+ax2 = ax.twinx()
+
+# Plot the relative temperature data in red
+plot_timeseries(ax,climate_change.index,climate_change['relative_temp'], "red", "Time (years)","Relative temperature (Celsius)")
+plt.show()
+
+
+>>>Annotation
+
+ax2.annotate(">1 degree", xy=[pd.TimeStamp('2015-10-09'),1]
+
+or
+
+ax2.annotate(">1 degree", xy=(pd.TimeStamp('2015-10-09'),1),
+xytext=(pd.Timestamp('2008-10-06'),-02)
+arrowprops={}
+)
+
+or arrowprops={"arrowstyle":"->","color":"gray"}
+
+
+fig, ax = plt.subplots()
+
+fig, ax = plt.subplots()
+
+# Plot the CO2 levels time-series in blue
+plot_timeseries(ax, climate_change.index, climate_change["co2"], 'blue', "Time (years)", "CO2 levels")
+
+# Create an Axes object that shares the x-axis
+ax2 = ax.twinx()
+
+# Plot the relative temperature data in red
+plot_timeseries(ax2, climate_change.index, climate_change['relative_temp'], 'red', "Time (years)", "Relative temp (Celsius)")
+
+# Annotate the point with relative temperature >1 degree
+ax2.annotate(">1 degree", xy=(pd.Timestamp('2015-10-06'), 1), xytext=(pd.Timestamp('2008-10-06'), -0.2), arrowprops={'arrowstyle':'->', 'color':'gray'})
+
+plt.show()
+
+
+>>Bar
+
+fig, ax = plt.subplots()
+
+# Plot a bar-chart of gold medals as a function of country
+ax.bar(medals.index,medals["Gold"])
+
+ax.bar(medals.index,medals['Silver'],bottom=medals['Gold'])
+ax.bar(medals.index,medals['Bronze'],bottom=medals['Gold']+medals['Silver'])
+# Set the x-axis tick labels to the country names
+ax.set_xticklabels(medals.index, rotation=90)
+
+# Set the y-axis label
+ax.set_ylabel('Number of medals')
+
+plt.show()
+
+>>Add labels
+
+# Add bars for "Gold" with the label "Gold"
+ax.bar(medals.index,medals["Gold"],label="Gold")
+
+# Stack bars for "Silver" on top with label "Silver"
+ax.bar(medals.index,medals['Silver'],bottom=medals['Gold'], label="Silver")
+
+# Stack bars for "Bronze" on top of that with label "Bronze"
+ax.bar(medals.index,medals['Bronze'],bottom=medals['Gold']+medals['Silver'],label="Bronze")
+# Display the legend
+ax.legend()
+
+plt.show()
+
+
+>>histogram
+fig, ax = plt.subplots()
+
+ax.hist(mens_rowing["Height"], label="Rowing", bins=5)
+ax.hist(mens_gymnastic["Height], label="Gymnastics", bins=5)
+#ax.hist(mens_gymnastic["Height], label="Gymnastics", bins=[150,160,170,180,190,200,210], histtype=step)
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("# of observations")
+plt.legend()
+plt.show()
+
+
+fig, ax = plt.subplots()
+
+# Plot a histogram of "Weight" for mens_rowing
+ax.hist(mens_rowing['Weight'],label="Rowing", histtype='step',bins=5)
+
+# Compare to histogram of "Weight" for mens_gymnastics
+ax.hist(mens_gymnastics['Weight'],label="Gymnastics", histtype='step',bins=5)
+
+ax.set_xlabel("Weight (kg)")
+ax.set_ylabel("# of observations")
+
+# Add the legend and show the Figure
+plt.legend()
+plt.show()
+
+
+>>Statistical plotting
+
+ax.bar("Rowing",
+	mens_rowing["Height"].mean(),
+	yerr=mens_rowing["Height"].std())
+
+
+ax.errorbar(seattle_weather["MONTH"],
+	seattle_weather["MLY-TAVG-NORMAL"],
+	seattle_weather["MLY-TAVG-STDDEV"])
+
+>>boxplots
+fig, ax = plt.subplots()
+ax.boxplot([mens_rowing["Height"],
+	mens_gymnastics["Height"]])
+ax.set_xticklabels(["Rowing","Gymnastics"])
+ax.set_ylabel("Height (cm)")
+
+plt.show()
+
+#intercordal range are the edges of the boxes
+25% and 75% percentiles
+whiskers are 1.5 times the intercordial range
+points outside the whiskers are outliers
+
+>>>
+
+fig, ax = plt.subplots()
+
+# Add a bar for the rowing "Height" column mean/std
+ax.bar("Rowing", mens_rowing['Height'].mean(), yerr=mens_rowing['Height'].std())
+
+# Add a bar for the gymnastics "Height" column mean/std
+ax.bar("Rowing", mens_gymnastics['Height'].mean(), yerr=mens_gymnastics['Height'].std())
+
+# Label the y-axis
+ax.set_ylabel("Height (cm)")
+
+>>>
+
+fig, ax = plt.subplots()
+
+# Add Seattle temperature data in each month with error bars
+ax.errorbar(seattle_weather["MONTH"],
+	seattle_weather["MLY-TAVG-NORMAL"],
+	seattle_weather["MLY-TAVG-STDDEV"])
+
+# Add Austin temperature data in each month with error bars
+ax.errorbar(austin_weather["MONTH"],
+	austin_weather["MLY-TAVG-NORMAL"],
+	austin_weather["MLY-TAVG-STDDEV"])
+
+# Set the y-axis label
+ax.set_ylabel('Temperature (Fahrenheit)')
+
+plt.show()
+
+>>>>
+
+fig, ax = plt.subplots()
+ax.boxplot([mens_rowing["Height"],
+	mens_gymnastics["Height"]])
+ax.set_xticklabels(["Rowing","Gymnastics"])
+ax.set_ylabel("Height (cm)")
+
+plt.show()
+
+>>>
+bivariant comparison
+
+
+fig, ax = plt.subplots()
+
+# Add data: "co2" on x-axis, "relative_temp" on y-axis
+ax.scatter(climate_change['co2'],climate_change['relative_temp'], color='red', label="co2"
+,c=climate_change.index  #older dates will be a darker color
+)
+
+ax.set_xlabel('CO2 (ppm)')
+ax.set_ylabel('Relative temperature (Celsius)')
+
+plt.show()
+
+plt.style.use('ggplot')
+plt.style.use('bmh')
+plt.style.use('seaborn-blind')
+plt.style.use('Solarize_Light2')
+
+dark backgrounds are less visible
+tableau-colorblind10
+grayscale
+
+one out of twenty people are color blind
+
+>>Saving the figure
+
+fig.savefig('gold_medals.png')
+
+fig.savefig("gold_medals.jpg", quality=50)
+
+fig.savefig('gold_medals.png', dpi=300)
+
+fig.set_size_inches([5,3]) #width and height of the figure
+
+programming make your faster
+
+summer_2016_medals['Sport']
+
+sports= summer_2016_medals['Sport'].unique()  # a column is a series
+
+for sport in sports:
+	sport_df=summer_2016_medals[summer_2016_medals['Sport']==sport]
+	ax.bar(sport, sport_df['Height'].mean(),
+	yerr=sport_df['Height'].std())
+
+ax.set_ylabel('Height (cm)")
+ax.set_xticklabels(sports,rotation=90)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+

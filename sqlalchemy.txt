@@ -1,0 +1,71 @@
+>>Printing a list of tables
+
+# Import create_engine
+from sqlalchemy import create_engine
+
+# Create an engine that connects to the census.sqlite file: engine
+engine = create_engine('sqlite:///census.sqlite')
+
+# Print table names
+print(engine.table_names())
+
+>>using reflection to get object definition metadata
+
+def pyconn():
+    return connection
+engine=create_engine('mssql://',creator=pyconn)
+#print(engine.table_names())
+metadata=MetaData()
+equipment=Table('bEMEM', metadata,autoload=True,autoload_with=engine)
+print(repr(equipment))
+
+>>displaying columns
+
+from sqlalchemy import create_engine, MetaData, Table
+
+engine = create_engine('sqlite:///census.sqlite')
+
+metadata = MetaData()
+
+# Reflect the census table from the engine: census
+census = Table('census', metadata,autoload=True,autoload_with=engine)
+
+# Print the column names
+print(census.columns.keys())
+
+# Print full metadata of census
+print(repr(census))
+
+>>Proxy
+
+connection=engine.connect()
+stmt='select * from people'
+result_proxy=connection.execute(stmt)
+results=result_proxy.fetchall()
+
+first_row=results[0]
+print(first_row.keys())
+print(first_row.state)
+
+sqlalchemy hides differences between backend database types
+
+>>Select ad fetchmany
+
+# Import select
+from sqlalchemy.sql import select
+from sqlalchemy import MetaData, Table
+
+# Reflect census table via engine: census
+census = Table('census', metadata, autoload=True, autoload_with=engine)
+
+# Build select statement for census table: stmt
+stmt = select([census])
+
+# Print the emitted statement to see the SQL string
+print(stmt)
+
+# Execute the statement on connection and fetch 10 records: result
+results = connection.execute(stmt).fetchmany(size=10)
+
+# Execute the statement and print the results
+print(results)

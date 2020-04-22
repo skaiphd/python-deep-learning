@@ -1,0 +1,1364 @@
+np.mean average
+np.median (sort - high to low - middle point)
+np.corrcoef
+np.std
+np.sum
+np.sort
+np.column_stack
+
+
+listOfCoordinates=list(zip(whiteIndex[0],whiteIndex[1]))
+
+for cord in listOfCoordinates:
+    print(demo2[cord[0],:])
+
+mathplotlib
+import matplotlib.pyplot as plt
+import numpy as py
+
+
+plt.plot(year,pop)
+plt.show()
+
+or 
+plt.scatter(year,pop)
+
+or
+
+divide into bins
+
+plt.hist(race,bins=9)
+plt.clf()
+plt.xscale
+plt.xlabel
+plt.ylabel
+plt.title
+plt.yticks
+
+plt.yticks([1000,10000,10000],['1k','10k','100k'])
+
+plt.scatter(gdp_cap, life_exp, s = pop, c=col)
+s = size
+c= color
+
+listOfCoordinates= list(zip(result[0], result[1]))
+
+hist1=np.array(hist)
+gender=hist1[:,1]
+race=hist1[:,2]
+
+
+for cord in listOfCoordinates:
+    print(cord)
+
+Dataframe
+pandas stack
+import pandas as pd
+
+dict={ "country":["brazil","russia"],
+"population":[200.4,143.5]}
+
+brics=pd.DataFrame(dict)
+brics=pd.read_csv("path/to/brics.csv", index_cols=0)
+
+df["A"] = df["A"].fillna(0)
+
+index and select data
+
+miles=costs['Miles'].tolist()
+dollars=costs['EMDollars'].tolist()
+costPerMile=costs['CostPerMile'].tolist()
+print(type(costs.loc[:,['Miles']]))
+
+print(cars.loc[['JPN']])
+print(cars.iloc[[2]])
+
+##iseries
+print(cars.loc[:,'drives_right'])
+##dataframe
+print(cars.loc[:,['drives_right']])
+
+equivalent
+miles=costs['Miles'].tolist()
+miles=costs.loc[:,'Miles']
+
+comparison
+
+Numpy
+print(np.logical_and(my_house<11,your_house<11 ))
+print(np.logical_or(my_house>18.5,my_house<10))
+np.logical_not(val1,val2)
+
+Filtering pandas
+costPerMile2=costs['CostPerMile']<1
+
+dr=cars['drives_right']
+sel=cars[dr]
+
+
+cpc=cars["cars_per_cap"]
+many_cars=cpc>500
+car_maniac=cars[many_cars]
+
+medium=cars['cars_per_cap']
+sel=cars[np.logical_and(medium>100,medium<500)]
+
+if z%2 ==0 :
+ print('abc')
+elif z%3==0 :
+ print('def')
+else :
+ print('g')
+
+while condition:
+  expression
+
+for var in seq:
+  expression
+
+fam=[1,2,3,4,5]
+for height in fam :
+    print(height)
+
+fam=[1,2,3,4,5]
+for index, height in enumerate(fam):
+    print(str(height) + ":"+str(index))
+
+for c in "family" :
+    print(c.capitalize())
+
+house = [["hallway", 11.25], 
+         ["kitchen", 18.0], 
+         ["living room", 20.0], 
+         ["bedroom", 10.75], 
+         ["bathroom", 9.50]]
+
+for x in house :
+    print(x[1])
+
+#items() for a dictionary
+world={"afghanistan":30.55,
+       "albania":2.77,
+       "algeria":39.21
+      }
+for key, value in world.items() :
+    print(key + ' -- ' + str(value))
+
+np_height=np.array([1.73,1.68,1.71,1.89,1.79])
+np_weight=np.array([65.4,59.2,63.6,88.4,68.7])
+measures= np.array([np_height, np_weight])
+print(measures)
+
+for val in np.nditer(measures):
+    print(val)
+
+for label,row in costs.iterrows():
+    print(label)
+    print(row)
+
+for label,row in costs.iterrows():
+    print(str(label)+":" +str(row["Equipment"]) + " "+str(row["Miles"]))
+
+for label,row in costs.iterrows():
+        costs.loc[label,"name_length"]=len(row["Equipment"])
+print(costs)
+
+costs.loc["name_length"]=costs["EmployeeName"].apply(len)
+
+np.random.seed(123)
+dice=randint(1,7)
+print(np.random.rand())
+
+step=50
+while step>0:
+    dice = np.random.randint(1,7)
+    if dice<=2:
+        step=step-7
+    elif dice<=5:
+        step=step+1
+    else:
+        step=step+np.random.randint(1,7)
+    print(step)
+
+
+np.random.seed(123)
+outcomes=[]
+for x in range(10):
+    coin=np.random.randint(0,2)
+    if coin==0:
+        outcomes.append("heads")
+    else:
+        outcomes.append("tails")
+        
+print(outcomes)
+
+np.random.seed(123)
+tails=[0]
+for x in range(100):
+    coin=np.random.randint(0,2)
+    tails.append(tails[x]+coin)
+        
+print(tails)
+
+np.random.seed(123456)
+step=0
+plot_steps=[]
+for x in range(10000):
+    dice=np.random.randint(1,7)
+    if dice<=2 :
+        step=step-1
+    elif dice>=3 and dice<=5:
+        step=step+1
+    elif dice==6:
+        step=step+np.random.randint(1,7)
+    #print(step)
+    plot_steps.append(step)
+    
+plt.plot(plot_steps)
+plt.show()
+
+np.random.seed(123456)
+step=0
+final_tails=[]
+for x in range(10000):
+    tails=[0]
+    for y in range(10):
+        coin=np.random.randint(0,2)
+        tails.append(tails[y]+coin)
+    
+    final_tails.append(tails[-1])
+
+#print(final_tails)
+plt.hist(final_tails, bins=10)
+plt.show()
+
+np.transpose
+
+
+intermediate Data Visualization with Seaborn
+introduction to python for finance
+recurrent neural networks for language modeling
+dealing with missing data in python
+feature engineering for nlp in python
+introduction to deep learning with pytorch
+hyperparameter tuning in python
+introduction to tensorflow in python
+introduction to data visualization with matplotlib
+linear classifiers in python
+machine learning for time series data in python
+extreme gradient boosting with xgboost
+supervised learning with scikit
+data visualization with python
+
+from sklearn.neighbors import KNeighborsClassifier
+iris=load_iris()
+
+#bunch lets you use a python dict like an object
+print(type(iris))
+print(iris.keys())
+
+#feature and target are numpy arrays
+print('features type:' + str(type(iris.data)))
+print('target type:' + str(type(iris.target)))
+print(iris.data.shape)
+
+X=iris.data
+y=iris.target
+
+df=pd.DataFrame(X,columns=iris.feature_names)
+print(df.head(5))
+
+#df.info()
+#df.describe()
+pd.plotting.scatter_matrix(df,c=y)
+
+knn=KNeighborsClassifier(algorithm='auto', leaf_size=30,metric='minkowski',metric_params=None,n_jobs=1,n_neighbors=6,p=2,weights='uniform')
+
+knn.fit(iris['data'],iris['target'])
+
+#print(iris['data'])
+#print(iris['target'])
+
+X_new=np.array([[5.6,2.8,3.9,1.1],[5.7,2.6,3.8,1.3],[4.7,3.2,1.3,0.2]])
+prediction=knn.predict(X_new);
+print(prediction)
+
+accurance is the fraction of correct predictions divided by the number of data points
+
+model complexity curve
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test= train_test_split(X,y,test_size=0.3, random_state=21, stratify=y)
+knn.fit(X_train,y_train)
+y_pred=knn.predict(X_test)
+#print(X_test)
+#print(y_pred)
+knn.score(X_test,y_test)
+
+
+from sklearn import datasets
+import matplotlib.pyplot as plt
+
+# Load the digits dataset: digits
+digits = datasets.load_digits()
+
+# Print the keys and DESCR of the dataset
+print(digits.DESCR)
+print(digits.keys())
+
+# Print the shape of the images and data keys
+print(digits.images.shape)
+print(digits.data.shape)
+
+# Display digit 1010
+plt.imshow(digits.images[1010], cmap=plt.cm.gray_r, interpolation='nearest')
+plt.show()
+
+
+model complexity model
+
+# Setup arrays to store train and test accuracies
+neighbors = np.arange(1, 9)
+train_accuracy = np.empty(len(neighbors))
+test_accuracy = np.empty(len(neighbors))
+
+# Loop over different values of k
+for i, k in enumerate(neighbors):
+    # Setup a k-NN Classifier with k neighbors: knn
+    knn = KNeighborsClassifier(algorithm='auto',
+                         leaf_size=30,
+                         metric='minkowski',
+                         metric_params=None,
+                         n_jobs=1,
+                         n_neighbors=k,
+                         p=2,
+                         weights='uniform')
+    # Fit the classifier to the training data
+    knn.fit(X_train,y_train)
+    
+    #Compute accuracy on the training set
+    train_accuracy[i] = knn.score(X_train, y_train)
+
+    #Compute accuracy on the testing set
+    test_accuracy[i] = knn.score(X_test, y_test)
+
+# Generate plot
+plt.title('k-NN: Varying Number of Neighbors')
+plt.plot(neighbors, test_accuracy, label = 'Testing Accuracy')
+plt.plot(neighbors, train_accuracy, label = 'Training Accuracy')
+plt.legend()
+plt.xlabel('Number of Neighbors')
+plt.ylabel('Accuracy')
+plt.show()
+
+regression
+reg=LinearRegression()
+reg.fit(X_rooms,y)
+prediction_space=np.linspace(min(X_rooms),max(X_rooms)).reshape(-1,1)
+
+plt.scatter(X_rooms,y)
+plt.ylabel('house price in $1000s')
+plt.xlabel('number of rooms')
+plt.plot(prediction_space, reg.predict(prediction_space),color='black', linewidth=3)
+plt.show()
+
+
+plt.plot(prediction_space, reg.predict(prediction_space),color='black', linewidth=3)
+
+sns.heatmap(df.corr(), square=True, cmap='RdYlGn')
+
+Ordinary least squares (OLS)
+Minimize sum of squares of residuals
+
+X_CrimeIndex=X[:,0]
+X_CrimeIndex=X_CrimeIndex.reshape(-1,1)
+X_train, X_test,y_train,y_test=train_test_split(X_CrimeIndex,y,test_size=0.2,random_state=42)
+regression=LinearRegression()
+regression.fit(X_train,y_train)
+y_prediction=regression.predict(X_test)
+plt.scatter(X_CrimeIndex,y)
+plt.plot(X_test,y_prediction, c="Purple")
+plt.ylabel('house price in $1000s')
+plt.xlabel('crime index')
+plt.show()
+regression.score(X_test,y_test)
+
+R2 needs to be close to 1
+
+print("R^2: {}".format(regression.score(X_test,y_test)))
+rmse = np.sqrt(mean_squared_error(y_test,y_prediction))
+print("Root Mean Squared Error: {}".format(rmse))
+
+Regularization
+linear regression is used to minimize loss function
+large coefficients can lead to overfitting
+regularizing is penalizing for large coefficients
+
+Cross-Validation and model performance
+5 fold validation 
+
+Ridge regression (check for overfitting)
+
+X_Rooms=X[:,5]
+X_Rooms=X_Rooms.reshape(-1,1)
+X_train, X_test,y_train,y_test=train_test_split(X_CrimeIndex,y,test_size=0.2,random_state=42)
+
+lr=LinearRegression()
+lr.fit(X_train,y_train)
+
+train_score=lr.score(X_train, y_train)
+test_score=lr.score(X_test, y_test)
+
+rr=Ridge(alpha=0.1, normalize=True)
+rr.fit(X_train,y_train)
+rr_pred=ridge.predict(X_test)
+#print(rr_pred)
+rr.score(X_test,y_test)
+
+Ridge_train_score=rr.score(X_train,y_train)
+Ridge_test_score=rr.score(X_test,y_test)
+
+rr100=Ridge(alpha=100)
+rr100.fit(X_train, y_train)
+
+Ridge_train_score100=rr100.score(X_train,y_train)
+Ridge_test_score100=rr100.score(X_test,y_test)
+
+print ("linear regression train score:"+ str(train_score))
+print ("linear regression test score:"+ str( test_score))
+print ("ridge regression train score low alpha:"+ str( Ridge_train_score))
+print ("ridge regression test score low alpha:"+ str( Ridge_test_score))
+print ("ridge regression train score high alpha:"+ str( Ridge_train_score100))
+print ("ridge regression test score high alpha:"+ str( Ridge_test_score100))
+
+plt.plot(rr.coef_,alpha=0.7,linestyle='none',marker='*',markersize=5,color='red',label=r'Ridge; $\alpha = 0.01$',zorder=7) # zorder for ordering the markers
+plt.plot(rr100.coef_,alpha=0.5,linestyle='none',marker='d',markersize=6,color='blue',label=r'Ridge; $\alpha = 100$') # alpha here is for transparency
+plt.plot(lr.coef_,alpha=0.4,linestyle='none',marker='o',markersize=7,color='green',label='Linear Regression')
+plt.xlabel('Coefficient Index',fontsize=16)
+plt.ylabel('Coefficient Magnitude',fontsize=16)
+plt.legend(fontsize=13,loc=4)
+plt.show()
+
+
+lasso can be used to determine important features in a dataset
+
+print(df.feature_names)
+names=df.feature_names
+lasso=Lasso(alpha=0.1)
+lasso_coef=lass.fit(X,y).coef_
+
+_ = plt.plot(range(len(names)),lasso_coef)
+_ = plt.xticks(range(len(names)),names,rotation=60)
+_ = plt.ylabel('Coefficients')
+plt.show()
+
+
+def display_plot(cv_scores, cv_scores_std):
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    ax.plot(alpha_space, cv_scores)
+
+    std_error = cv_scores_std / np.sqrt(10)
+
+    ax.fill_between(alpha_space, cv_scores + std_error, cv_scores - std_error, alpha=0.2)
+    ax.set_ylabel('CV Score +/- Std Error')
+    ax.set_xlabel('Alpha')
+    ax.axhline(np.max(cv_scores), linestyle='--', color='.5')
+    ax.set_xlim([alpha_space[0], alpha_space[-1]])
+    ax.set_xscale('log')
+    plt.show()
+
+confusion matrix
+true positive    false negative
+false positive   true negative
+
+accuracy=(tp+fn) / (tp+tn+fp+fn)
+precision= tp/(tp+fp)
+recall=tp/(tp+fn)
+
+f1= 2* (precision*recall)/(precision+recall)
+
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+
+knn=KNeighborsClassifier(algorithm='auto',
+                         leaf_size=30,
+                         metric='minkowski',
+                         metric_params=None,
+                         n_jobs=1,
+                         n_neighbors=8,
+                         p=2,
+                         weights='uniform')
+
+#print(X)
+#print(y)
+
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.4,random_state=42)
+knn.fit(X_train,y_train)
+y_pred=knn.predict(X_test)
+print(confusion_matrix(y_test,y_pred))
+print(classification_report(y_test,y_pred))
+
+Logistic Regression
+used in classification problems
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_curve
+
+two possible labels
+
+logreg=LogisticRegression()
+X_train, X_test, y_train,y_test=train_test_split(X,y,test_size=0.4, random_state=42)
+logreg.fit(X_train,y_train)
+y_pred=logreg.predict(X_test)
+
+Receiver Operational Curve (ROC)
+
+
+hyperparameter tuning
+
+logreg=LogisticRegression(solver="lbfgs")
+#a large C will result in overfit and a small C will lead to underfit
+c_space = np.logspace(-4, -0.5, 30)
+#print(c_space)
+param_grid = {'C': c_space}
+#param_grid={'C': np.arange(1,5)}
+
+X_train, X_test, y_train, y_test=train_test_split(X,y,test_size=0.3,random_state=42)
+
+#logreg_cv=GridSearchCV(logreg,param_grid,cv=5)
+#logreg_cv.fit(X_train,y_train)
+
+#print(logreg_cv.best_params_)
+#print(logreg_cv.best_score_)
+
+tree = DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+                       max_features=None, max_leaf_nodes=None,
+                       min_impurity_decrease=0.0, min_impurity_split=None,
+                       min_samples_leaf=1, min_samples_split=2,
+                       min_weight_fraction_leaf=0.0, presort=False,
+                       random_state=None, splitter='best')
+param_dist = {"max_depth": [3, None],
+              "max_features": randint(1, 9),
+              "min_samples_leaf": randint(1, 9),
+              "criterion": ["gini", "entropy"]}
+tree_cv=RandomizedSearchCV(tree,param_grid,cv=3)
+tree_cv.fit(X,y)
+
+#print("Tuned Decision Tree Parameters: {}".format(tree_cv.best_params_))
+#print("Best score is {}".format(tree_cv.best_score_))
+
+
+Hold-out set reasoning
+
+1. split data into training and hold-out set at the beginning
+2. perform grid search cross validation on training set
+3. choose best hyperparameters and evaluate on the hold-outset
+
+Lasso used the L1 penalty to regularize, while ridge used the 
+L2 penalty
+
+isin
+
+cities = ["Moscow", "Saint Petersburg"]
+
+# Subset temperatures using square brackets
+print(temperatures[temperatures["city"].isin(cities)])
+
+# Subset temperatures_ind using .loc[]
+print(temperatures_ind.loc[cities])
+
+>>>tuple pairs to keep
+
+# Index temperatures by country & city
+temperatures_ind = temperatures.set_index(["country", "city"])
+
+# List of tuples: Brazil, Rio De Janeiro & Pakistan, Lahore
+rows_to_keep = [("Brazil", "Rio De Janeiro"), ("Pakistan", "Lahore")]
+
+# Subset for rows to keep
+print(temperatures_ind.loc[rows_to_keep])
+
+print(temperatures_ind.sort_index())
+
+# Sort temperatures_ind by index values at the city level
+print(temperatures_ind.sort_index(level="city"))
+
+# Sort temperatures_ind by country then descending city
+print(temperatures_ind.sort_index(level=["country", "city"], ascending = [True, False]))
+
+>>>loc
+
+# Sort the index of temperatures_ind
+temperatures_srt = temperatures_ind.sort_index()
+
+# Subset rows from Pakistan to Russia
+print(temperatures_srt.loc["Pakistan":"Russia"])
+
+# Incorrectly subset rows from Lahore to Moscow
+print(temperatures_srt.loc["Lahore":"Moscow"])
+
+# Subset rows from Pakistan, Lahore to Russia, Moscow
+print(temperatures_srt.loc[("Pakistan", "Lahore"):("Russia", "Moscow")])
+
+>>>>loc
+
+# Subset rows from India, Hyderabad to Iraq, Baghdad
+print(temperatures_srt.loc[("India", "Hyderabad"):("Iraq", "Baghdad")])
+
+# Subset columns from date to avg_temp_c
+print(temperatures_srt.loc[:, "date":"avg_temp_c"].head(5))
+
+# Subset in both directions at once
+print(temperatures_srt.loc[("India", "Hyderabad"):("Iraq", "Baghdad"), "date":"avg_temp_c"])
+
+>>Condition
+
+# Use Boolean conditions to subset temperatures for rows in 2010 and 2011
+print(temperatures[(temperatures["date"] >= "2010") & (temperatures["date"] < "2012")])
+
+# Set date as an index
+temperatures_ind = temperatures.set_index("date")
+
+# Use .loc[] to subset temperatures_ind for rows in 2010 and 2011
+print(temperatures_ind.loc["2010":"2011"])
+
+# Use .loc[] to subset temperatures_ind for rows from Aug 2010 to Feb 2011
+print(temperatures_ind.loc["2010-08":"2011-02"])
+
+>>>>>iLoc
+# Get 23rd row, 2nd column (index 22, 1)
+print(temperatures.iloc[22,1])
+
+# Use slicing to get the first 5 rows
+print(temperatures.iloc[:5,:])
+
+# Use slicing to get columns 2 to 3
+print(temperatures.iloc[:,2:4])
+
+# Use slicing in both directions at once
+print(temperatures.iloc[:5,2:4])
+
+>>>>Pivot Table
+# Add a year column to temperatures
+temperatures["year"] = temperatures["date"].dt.year
+
+# Pivot avg_temp_c by country and city vs year
+temp_by_country_city_vs_year = temperatures.pivot_table("avg_temp_c", index = ["country", "city"], columns = "year")
+
+# See the result
+print(temp_by_country_city_vs_year)
+
+>>>>Subsetting with loc
+
+temp_by_country_city_vs_year.loc["Egypt":"India"]
+
+# Subset for Egypt, Cairo to India, Delhi
+temp_by_country_city_vs_year.loc[("Egypt", "Cairo"):("India", "Delhi")]
+
+# Subset in both directions at once
+temp_by_country_city_vs_year.loc[("Egypt", "Cairo"):("India", "Delhi"), "2005":"2010"]
+
+>>Unpivot a table
+
+
+def unpivot(frame):
+    N, K = frame.shape
+    data = {'value': frame.to_numpy().ravel('F'),
+            'variable': np.asarray(frame.columns).repeat(N),
+            'date': np.tile(np.asarray(frame.index), K)}
+    return pd.DataFrame(data, columns=['date', 'variable', 'value'])
+
+>>Find the max mean in a data set
+
+# Get the worldwide mean temp by year
+mean_temp_by_year = temp_by_country_city_vs_year.mean()
+
+# Find the year that had the highest mean temp
+print(mean_temp_by_year[mean_temp_by_year == mean_temp_by_year.max()])
+
+# Get the mean temp by city
+mean_temp_by_city = temp_by_country_city_vs_year.mean(axis="columns")
+
+# Find the city that had the lowest mean temp
+print(mean_temp_by_city[mean_temp_by_city == mean_temp_by_city.min()])
+
+>>>Plot bar
+
+# Import matplotlib.pyplot with alias plt
+import matplotlib.pyplot as plt
+
+# Look at the first few rows of data
+print(avocados.head(5))
+
+# Get the total number of avocados sold of each size
+nb_sold_by_size = avocados.groupby('size')['nb_sold'].sum()
+print(nb_sold_by_size)
+
+# Create a bar plot of the number of avocados sold by size
+plt.plot(kind=bar, nb_sold_by_size)
+
+# Show the plot
+plt.show()
+>>Plot line
+
+import matplotlib.pyplot as plt
+
+# Get the total number of avocados sold on each date
+nb_sold_by_date = avocados.groupby('date')['nb_sold'].sum()
+
+# Create a line plot of the number of avocados sold by date
+nb_sold_by_date.plot(kind='line', x='date',y='nb_sold' )
+
+# Show the plot
+plt.show()
+
+>>Histogram
+
+# Histogram of conventional avg_price 
+avocados[avocados['type']=='conventional']['avg_price'].hist(alpha=0.7)
+
+# Histogram of organic avg_price
+avocados[avocados['type']=='organic']['avg_price'].hist(alpha=0.7)
+
+# Add a legend
+plt.legend('conventional','organic')
+
+# Show the plot
+plt.show()
+
+>>Is a Number
+
+# Import matplotlib.pyplot with alias plt
+import matplotlib.pyplot as plt
+
+# Check individual values for missing values
+print(avocados_2016.isna())
+
+# Check each column for missing values
+print(avocados_2016.isna().any())
+
+# Bar plot of missing values by variable
+avocados_2016.isna().sum().plot(kind="bar")
+
+# Show plot
+plt.show()
+
+>>>drop na
+avocados_complete = avocados_2016.dropna()
+
+# Check if any columns contain missing values
+print(avocados_complete.isna().any())
+
+>>>fillna(0)
+
+# From previous step
+cols_with_missing = ["small_sold", "large_sold", "xl_sold"]
+avocados_2016[cols_with_missing].hist()
+plt.show()
+
+# Fill in missing values with 0
+avocados_filled = avocados_2016.fillna(0)
+
+# Create histograms of the filled columns
+avocados_filled[cols_with_missing].hist()
+
+# Show the plot
+plt.show()
+
+>>Create dataframe using a list of dictionaries
+
+avocados_list = [
+    {'date': '2019-11-03', 'small_sold':10376832, 'large_sold': 7835071},
+     {'date': '2019-11-10', 'small_sold':10717154, 'large_sold': 8561348},
+]
+
+# Convert list into DataFrame
+avocados_2019 = avocados_list
+
+# Print the new DataFrame
+print(avocados_2019)
+
+>> create dataframe using a list of lists
+# Create a dictionary of lists with new data
+avocados_dict = {
+  "date": ['2019-11-17','2019-12-01'],
+  "small_sold": [10859987,9291631],
+  "large_sold": [7674135,6238096]
+}
+
+# Convert dictionary into DataFrame
+avocados_2019 = pd.DataFrame(avocados_dict)
+
+# Print the new DataFrame
+print(avocados_2019)
+
+>>Read and group
+
+airline_bumping = pd.read_csv("airline_bumping.csv")
+print(airline_bumping.head())
+
+# For each airline, select nb_bumped and total_passengers and sum
+airline_totals = airline_bumping.groupby("airline")[["nb_bumped", "total_passengers"]].sum()
+
+>>Dataframe to_csv
+
+airline_totals_sorted = airline_totals.sort_values("bumps_per_10k", ascending=False)
+
+# Print airline_totals_sorted
+print(airline_totals_sorted)
+
+# Save as airline_totals_sorted.csv
+airline_totals_sorted.to_csv("airline_totals_sorted.csv")
+
+
+>>pandas read_csv
+
+# Import pandas
+import pandas as pd
+
+# Create the list of file names: filenames
+filenames = ['Gold.csv', 'Silver.csv', 'Bronze.csv']
+
+# Create the list of three DataFrames: dataframes
+dataframes = []
+for filename in filenames:
+    dataframes.append(pd.read_csv(filename))
+
+# Print top 5 rows of 1st DataFrame in dataframes
+print(dataframes[0].head())
+
+>>>Sort Values
+
+# Import pandas
+import pandas as pd
+
+# Read 'monthly_max_temp.csv' into a DataFrame: weather1
+weather1 = pd.read_csv('monthly_max_temp.csv', index_col='Month')
+
+# Print the head of weather1
+print(weather1.head())
+
+# Sort the index of weather1 in alphabetical order: weather2
+weather2 = weather1.sort_index()
+
+# Print the head of weather2
+print(weather2.head())
+
+# Sort the index of weather1 in reverse alphabetical order: weather3
+weather3 = weather1.sort_index(ascending=False)
+
+# Print the head of weather3
+print(weather3.head())
+
+# Sort weather1 numerically using the values of 'Max TemperatureF': weather4
+weather4 = weather1.sort_values('Max TemperatureF')
+
+# Print the head of weather4
+print(weather4.head())
+
+>> forward Fill
+
+import pandas as pd
+
+year= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+
+print(year)
+# Reindex weather1 using the list year: weather2
+weather2 = weather1.reindex(year)
+
+# Print weather2
+print(weather2)
+
+# Reindex weather1 using the list year with forward-fill: weather3
+weather3 = weather1.reindex(year).ffill()
+
+# Print weather3
+print(weather3)
+
+>>reindex
+
+# Reindex names_1981 with index of names_1881: common_names
+common_names = names_1981.reindex(names_1881.index)
+
+# Print shape of common_names
+print(common_names.shape)
+
+# Drop rows with null counts: common_names
+common_names = common_names.dropna()
+
+>>pct_change
+df_cust=pd.DataFrame({'name':['A','B','C'], 'values':[1,3,6]})
+print(df_cust)
+values=df_cust.loc[:,'values']
+change=values.pct_change()
+print(change)
+
+>>columns.str.replace
+
+# Extract selected columns from weather as new DataFrame: temps_f
+temps_f = weather[['Min TemperatureF','Mean TemperatureF','Max TemperatureF']]
+
+# Convert temps_f to celsius: temps_c
+temps_c = (temps_f - 32) * 5/9
+
+# Rename 'F' in column names with 'C': temps_c.columns
+temps_c.columns = temps_c.columns.str.replace('F', 'C')
+
+# Print first 5 rows of temps_c
+print(temps_c.head())
+
+>>multiple()
+
+import pandas as pd
+
+# Read 'sp500.csv' into a DataFrame: sp500
+sp500 = pd.read_csv('sp500.csv', parse_dates=True, index_col='Date')
+
+# Read 'exchange.csv' into a DataFrame: exchange
+exchange = pd.read_csv('exchange.csv', parse_dates=True, index_col='Date')
+
+print(sp500)
+# Subset 'Open' & 'Close' columns from sp500: dollars
+dollars = sp500[['Open','Close']]
+
+# Print the head of dollars
+print(dollars.head())
+
+# Convert dollars to pounds: pounds
+pounds = dollars.multiply(exchange['GBP/USD'], axis='rows')
+
+# Print the head of pounds
+print(pounds.head())
+
+
+>>append
+import pandas as pd
+
+# Load 'sales-jan-2015.csv' into a DataFrame: jan
+jan = pd.read_csv('sales-jan-2015.csv', parse_dates=True, index_col='Date')
+
+# Load 'sales-feb-2015.csv' into a DataFrame: feb
+feb = pd.read_csv('sales-feb-2015.csv', parse_dates=True, index_col='Date')
+
+# Load 'sales-mar-2015.csv' into a DataFrame: mar
+mar = pd.read_csv('sales-mar-2015.csv', parse_dates=True, index_col='Date')
+
+# Extract the 'Units' column from jan: jan_units
+jan_units = jan['Units']
+
+# Extract the 'Units' column from feb: feb_units
+feb_units = feb['Units']
+
+# Extract the 'Units' column from mar: mar_units
+mar_units = mar['Units']
+
+# Append feb_units and then mar_units to jan_units: quarter1
+quarter1 = jan_units.append(feb_units).append(mar_units)
+
+# Print the first slice from quarter1
+print(quarter1.loc['jan 27, 2015':'feb 2, 2015'])
+
+# Print the second slice from quarter1
+print(quarter1.loc['feb 26, 2015':'mar 7, 2015'])
+
+# Compute & print total sales in quarter1
+print(quarter1.sum())
+
+>>>>>concat
+
+units = []
+
+# Build the list of Series
+for month in [jan, feb, mar]:
+    units.append(month['Units'])
+
+# Concatenate the list: quarter1
+quarter1 = pd.concat(units, axis='rows')
+
+# Print slices from quarter1
+print(quarter1.loc['jan 27, 2015':'feb 2, 2015'])
+print(quarter1.loc['feb 26, 2015':'mar 7, 2015'])
+
+>>>>>Concatenation Horizontally
+
+# Create a list of weather_max and weather_mean
+weather_list = [weather_max, weather_mean]
+
+# Concatenate weather_list horizontally
+weather = pd.concat(weather_list, axis=1)
+
+# Print weather
+print(weather)
+
+>>>append several iseries then pivot them into columns
+
+medals =[]
+
+for medal in medal_types:
+    # Create the file name: file_name
+    file_name = "%s_top5.csv" % medal
+    # Create list of column names: columns
+    columns = ['Country', medal]
+    # Read file_name into a DataFrame: medal_df
+    medal_df = pd.read_csv(file_name, header=0, index_col='Country', names=columns)
+    # Append medal_df to medals
+    medals.append(medal_df)
+    print(medals)
+
+# Concatenate medals horizontally: medals_df
+medals_df = pd.concat(medals, axis='columns')
+
+# Print medals_df
+print(medals_df)
+
+>>Concatenation using keys[]
+
+medals = pd.concat(medals, keys=['bronze', 'silver', 'gold'])
+
+>>Index Slice
+
+# Sort the entries of medals
+medals_sorted = medals.sort_index(level=0)
+
+# Print the number of Bronze medals won by Germany
+#print(medals_sorted.loc[('bronze','Germany')])
+
+# Print data about silver medals
+print(medals_sorted.loc['silver'])
+#print(medals_sorted.loc['bronze'])
+
+# Create alias for pd.IndexSlice: idx
+idx = pd.IndexSlice
+print(idx)
+
+# Print all the data on medals won by the United Kingdom
+print(medals_sorted.loc[idx[:,'United Kingdom'], :])
+
+>>Index slicing continued
+
+# Make the list of tuples: month_list
+month_list = [('january',jan),('february',feb),('march',mar)]
+
+print(jan)
+
+# Create an empty dictionary: month_dict
+month_dict = {}
+
+for month_name, month_data in month_list:
+
+    # Group month_data: month_dict[month_name]
+    month_dict[month_name] = month_data.groupby('Company').sum()
+
+# Concatenate data in month_dict: sales
+sales = pd.concat(month_dict)
+
+# Print sales
+print(sales)
+
+# Print all sales by Mediacore
+idx = pd.IndexSlice
+print(sales.loc[idx[:, 'Mediacore'], :])
+
+print(sales.loc[idx[:, 'Hooli'], :])
+
+>> Inner join
+
+# Create the list of DataFrames: medal_list
+medal_list = [bronze, silver, gold]
+
+# Concatenate medal_list horizontally using an inner join: medals
+medals = pd.concat(medal_list, keys=['bronze', 'silver', 'gold'], axis=1, join='inner')
+
+# Print medals
+print(medals)
+
+>>Looking at percent change between years
+
+print(china)
+print(us)
+# Resample and tidy china: china_annual
+china_annual = china.resample('A').last().pct_change(10).dropna()
+
+# Resample and tidy us: us_annual
+us_annual = us.resample('A').last().pct_change(10).dropna()
+
+# Concatenate china_annual and us_annual: gdp
+gdp = pd.concat([china_annual, us_annual], axis=1, join='inner')
+
+# Resample gdp and print
+print(gdp.resample('10A').last())
+
+>>merge
+
+# Merge revenue with managers on 'city': merge_by_city
+merge_by_city = pd.merge(revenue,managers, on='city')
+
+# Print merge_by_city
+print(merge_by_city)
+
+# Merge revenue with managers on 'branch_id': merge_by_id
+merge_by_id = pd.merge(revenue,managers,  on='branch_id')
+
+# Print merge_by_id
+print(merge_by_id)
+
+>>merge left_on and right_on
+combined = pd.merge(revenue, managers, left_on='city', right_on='branch')
+
+>>merge on multiple columns
+
+combined = pd.merge(revenue,managers, on=['branch_id','city','state'])
+
+
+>>groupby, sum, and pivot
+
+df.groupby(['Fruit','Name'],as_index = False).sum().pivot('Fruit','Name').fillna(0)
+
+>>set_index by level
+
+df.set_index(['Fruit','Name']).sum(level=[0,1])
+
+>>left and right merge
+
+# Merge revenue and sales: revenue_and_sales
+revenue_and_sales = pd.merge(revenue,sales, how='right', on=['city','state'])
+
+# Print revenue_and_sales
+print(revenue_and_sales)
+
+# Merge sales and managers: sales_and_managers
+sales_and_managers = pd.merge(sales, managers, how='left', left_on=['city','state'], right_on=['branch','state'])
+
+# Print sales_and_managers
+print(sales_and_managers)
+
+>>merge on
+# Perform the first merge: merge_default
+merge_default = pd.merge(sales_and_managers, revenue_and_sales)
+
+# Print merge_default
+print(merge_default)
+
+# Perform the second merge: merge_outer
+merge_outer = pd.merge(sales_and_managers, revenue_and_sales, how='outer')
+
+# Print merge_outer
+print(merge_outer)
+
+# Perform the third merge: merge_outer_on
+merge_outer_on = pd.merge(sales_and_managers, revenue_and_sales, how='outer', on=['city','state'])
+
+# Print merge_outer_on
+print(merge_outer_on)
+
+>>merge ordered and forward filled
+
+# Perform the first ordered merge: tx_weather
+tx_weather = pd.merge_ordered(austin,houston)
+
+# Print tx_weather
+print(tx_weather)
+
+# Perform the second ordered merge: tx_weather_suff
+tx_weather_suff = pd.merge_ordered(austin,houston, on='date', suffixes=['_aus','_hus'])
+
+# Print tx_weather_suff
+print(tx_weather_suff)
+
+# Perform the third ordered merge: tx_weather_ffill
+tx_weather_ffill = pd.merge_ordered(austin,houston, on='date', suffixes=['_aus','_hus'],fill_method='ffill')
+
+# Print tx_weather_ffill
+print(tx_weather_ffill)
+
+>>Resample
+
+merged = pd.merge_asof(auto, oil, left_on='yr', right_on='Date')
+
+# Print the tail of merged
+print(merged.tail())
+
+# Resample merged: yearly
+yearly = merged.resample('A', on='Date')[['mpg','Price']].mean()
+
+# Print yearly
+print(yearly)
+
+# print yearly.corr()edition
+print(yearly.corr())
+
+>>sep='\t' - tab delimited csv
+
+
+# Create file path: file_path
+file_path = 'Summer Olympic medallists 1896 to 2008 - EDITIONS.tsv'
+
+# Load DataFrame from file_path: editions
+editions = pd.read_csv(file_path, sep='\t')
+
+# Extract the relevant columns: editions
+editions = editions[['Edition', 'Grand Total', 'City', 'Country']]
+
+# Print editions DataFrame
+print(editions)
+
+>>>Print head and tail
+
+file_path = 'Summer Olympic medallists 1896 to 2008 - IOC COUNTRY CODES.csv'
+
+# Load DataFrame from file_path: ioc_codes
+ioc_codes = pd.read_csv(file_path)
+
+# Extract the relevant columns: ioc_codes
+ioc_codes = ioc_codes[['Country','NOC']]
+
+# Print first and last 5 rows of ioc_codes
+print(ioc_codes.head())
+print(ioc_codes.tail())
+
+>>> Load a dictionary of lists by Year
+
+# Import pandas
+import pandas as pd
+
+# Create empty dictionary: medals_dict
+medals_dict = {}
+
+for year in editions['Edition']:
+
+    # Create the file path: file_path
+    file_path = 'summer_{:d}.csv'.format(year)
+    
+    # Load file_path into a DataFrame: medals_dict[year]
+    medals_dict[year] = pd.read_csv(file_path)
+    
+    # Extract relevant columns: medals_dict[year]
+    medals_dict[year] = medals_dict[year][['Athlete', 'NOC', 'Medal']]
+    
+    # Assign year to column 'Edition' of medals_dict
+    medals_dict[year]['Edition'] = year
+    
+# Concatenate medals_dict: medals
+medals = pd.concat(medals_dict, ignore_index=True)
+
+# Print first and last 5 rows of medals
+print(medals.head())
+print(medals.tail())
+
+>>Pivot Table with the aggfunc='count'
+# Construct the pivot_table: medal_counts
+medal_counts = medals.pivot_table(index='Edition', values='Athlete', columns='NOC', aggfunc='count')
+
+# Print the first & last 5 rows of medal_counts
+print(medal_counts.head())
+print(medal_counts.tail())
+
+>>> computing fraction of medals
+
+# Set Index of editions: totals
+print(editions.head(5))
+print(medals.head(5))
+print(medal_counts.head(5))
+totals = editions.set_index('Edition')
+
+# Reassign totals['Grand Total']: totals
+totals = totals['Grand Total']
+
+# Divide medal_counts by totals: fractions
+fractions = medal_counts.divide(totals,axis='rows')
+
+# Print first & last 5 rows of fractions
+print(fractions.head())
+print(fractions.tail())
+
+>> computing percent change on fraction of medals
+
+# Apply the expanding mean: mean_fractions
+mean_fractions = fractions.expanding().mean()
+
+# Compute the percentage change: fractions_change
+fractions_change = mean_fractions.pct_change()*100
+
+# Reset the index of fractions_change: fractions_change
+fractions_change = fractions_change.reset_index()
+
+# Print first & last 5 rows of fractions_change
+print(fractions_change.head())
+print(fractions_change.tail())
+
+
+>> Left join
+
+# Left join editions and ioc_codes: hosts
+hosts = pd.merge(editions, ioc_codes, how='left')
+
+# Extract relevant columns and set index: hosts
+hosts = hosts[['Edition','NOC']].set_index('Edition')
+
+# Fix missing 'NOC' values of hosts
+print(hosts.loc[hosts.NOC.isnull()])
+hosts.loc[1972, 'NOC'] = 'FRG'
+hosts.loc[1980, 'NOC'] = 'URS'
+hosts.loc[1988, 'NOC'] = 'KOR'
+
+# Reset Index of hosts: hosts
+hosts = hosts.reset_index()
+
+>>pd.melt and reshape melt moves columns values into rows
+
+import pandas as pd
+
+print(fractions_change.head(5))
+# Reshape fractions_change: reshaped
+reshaped = pd.melt(fractions_change, id_vars='Edition', value_name='Change')
+print(reshaped.head(5))
+# Print reshaped.shape and fractions_change.shape
+print(reshaped.shape, fractions_change.shape)
+
+# Extract rows from reshaped where 'NOC' == 'CHN': chn
+#chn = reshaped.loc[reshaped.NOC == 'CHN']
+chn = reshaped.loc[reshaped.NOC == 'ANZ']
+
+# Print last 5 rows of chn
+print(chn.tail())
+
+
+>>Set_index and rename axis
+
+d = {'Index Title': ['Apples', 'Oranges', 'Puppies', 'Ducks'],'Column 1': [1.0, 2.0, 3.0, 4.0]}
+df = pd.DataFrame(d).set_index('Index Title').rename_axis('Col Name', axis=1)
+
+
+>>Set_index and sort index
+
+# Merge reshaped and hosts: merged
+merged = pd.merge(reshaped,hosts, how='inner')
+
+# Print first 5 rows of merged
+print(merged.head())
+
+# Set Index of merged and sort it: influence
+influence = merged.set_index('Edition').sort_index()
+
+# Print first 5 rows of influence
+print(influence.head())
+
+>> plot change
+
+import matplotlib.pyplot as plt
+
+# Extract influence['Change']: change
+change = influence['Change']
+
+# Make bar plot of change: ax
+ax = change.plot(kind='bar')
+
+# Customize the plot to improve readability
+ax.set_ylabel("% Change of Host Country Medal Count")
+ax.set_title("Is there a Host Country Advantage?")
+ax.set_xticklabels(editions['City'])
+
+# Display the plot
+plt.show()

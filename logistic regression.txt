@@ -1,0 +1,24 @@
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_curve
+x
+logreg=LogisticRegression()
+X_train, X_test, y_train,y_test=train_test_split(X,y,test_size=0.4, random_state=42)
+logreg.fit(X_train,y_train)
+y_pred=logreg.predict(X_test)
+#print(y_pred)
+
+y_pred_prob=logreg.predict_proba(X_test)[:,1]
+fpr, tpr, threshholds = roc_curve(y_test,y_pred_prob)
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.plot(fpr, tpr)
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.show()
+
+
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+
+

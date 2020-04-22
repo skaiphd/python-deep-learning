@@ -1,0 +1,13 @@
+reg=LinearRegression()
+reg.fit(X_rooms,y)
+prediction_space=np.linspace(min(X_rooms),max(X_rooms)).reshape(-1,1)
+plt.scatter(X_rooms,y)
+#X_train, X_test,y_train,y_test=train_test_split(X_rooms,y,test_size=0.3,random_state=42)
+plt.ylabel('house price in $1000s')
+plt.xlabel('number of rooms')
+plt.plot(prediction_space, reg.predict(prediction_space),color='black', linewidth=3)
+plt.show()
+#regression.score(X_test,y_test)
+
+
+
