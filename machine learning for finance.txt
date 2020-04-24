@@ -1,0 +1,131 @@
+print(lng_df.head())  # examine the dataframe
+print(spy_df.head())  # examine the SPY DataFrame
+
+# Plot the Adj_Close columns for SPY and LNG
+spy_df['Adj_Close'].plot(label='SPY', legend=True)
+lng_df['Adj_Close'].plot(label='LNG', legend=True, secondary_y=True)
+plt.show()  # show the plot
+plt.clf()  # clear the plot space for the next plot
+
+# Histogram of the daily price change percent of Adj_Close for LNG
+lng_df['Adj_Close'].pct_change().plot.hist(bins=50)
+plt.xlabel('adjusted close 1-day percent change')
+plt.show()
+
+>>moving average is a average in the n past days
+14,50, 200 days for stocks
+
+Rsi oscilates between 0 and 100 - close to 0 rebound and close to 100 then decline
+
+RSI=100 - 100/(1+RS) where RS= Average gain over n periods / Average loss over n periods
+
+
+corr=feature_target_df.corr()
+sns.heatmap(corr, annot=True)
+
+>>
+
+feature_names = ['5d_close_pct']  # a list of the feature names for later
+
+# Create moving averages and rsi for timeperiods of 14, 30, 50, and 200
+for n in [14, 30, 50, 200]:
+
+    # Create the moving average indicator and divide by Adj_Close
+    lng_df['ma' + str(n)] = talib.SMA(lng_df['Adj_Close'].values,
+                              timeperiod=n) / lng_df['Adj_Close']
+    # Create the RSI indicator
+    lng_df['rsi' + str(n)] = talib.RSI(lng_df['Adj_Close'].values, timeperiod=n)
+    
+    # Add rsi and moving average to the feature name list
+    feature_names = feature_names + ['ma' + str(n), 'rsi' + str(n)]
+    
+print(feature_names)
+print(lng_df.head(5))
+
+>>
+
+# Plot heatmap of correlation matrix
+sns.heatmap(corr, annot= True, annot_kws = {"size": 14})
+plt.yticks(rotation=0, size = 14); plt.xticks(rotation=90, size = 14)  # fix ticklabel directions and size
+plt.tight_layout()  # fits plot area to the plot, "tightly"
+plt.show()
+
+# Drop all na values
+lng_df = lng_df.dropna()
+
+# Create features and targets
+# use feature_names for features; '5d_close_future_pct' for targets
+features = lng_df[feature_names]
+targets = lng_df['5d_close_future_pct']
+
+# Create DataFrame from target column and feature columns
+feature_and_target_cols = ['5d_close_future_pct'] + feature_names
+print(feature_and_target_cols)
+feat_targ_df = lng_df[feature_and_target_cols]
+
+# Calculate correlation matrix
+corr = feat_targ_df.corr()
+print(corr)
+
+>>
+
+# Plot heatmap of correlation matrix
+sns.heatmap(corr, annot=True, annot_kws = {"size": 14})
+plt.yticks(rotation=0, size = 14); plt.xticks(rotation=90, size = 14)  # fix ticklabel directions and size
+plt.tight_layout()  # fits plot area to the plot, "tightly"
+plt.show()  # show the plot
+plt.clf()  # clear the plot area
+
+# Create a scatter plot of the most highly correlated variable with the target
+plt.scatter(lng_df['ma200'], lng_df['5d_close_future_pct'])
+plt.show()
+
+
+>>Making train and test sets for time series
+
+import statsmodels.api as sm
+
+linear_features=sm.add_constant(features)
+
+train_size = int(0.85 * targets.shape[0])
+
+train_features = linear_features[:train_size]
+train_targets = targets[:train_size]
+test_features = linear_features[train_size:]
+test_targets = targets[train_size:]
+
+print(linear_features.shape, train_features.shape, test_features.shape)
+
+model=sm.OLS(train_targets,train_features)
+results=model.fit()
+print(results.summary())
+
+print(results.pvalues)
+
+train_predictions = results.predict(train_features)
+test_predictions = results.predict(test_features)
+
+plt.scatter(train_predictions, train_targets, alpha=0.2, color='b', label='train')
+plt.scatter(test_predictions, test_targets, alpha=0.2, color='r', label='test')
+
+# Plot the perfect prediction line
+xmin, xmax = plt.xlim()
+plt.plot(np.arange(xmin, xmax, 0.01), np.arange(xmin, xmax, 0.01), c='k')
+
+# Set the axis labels and show the plot
+plt.xlabel('predictions')
+plt.ylabel('actual')
+plt.legend()  # show the legend
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+

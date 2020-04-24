@@ -387,6 +387,57 @@ plt.show()
 
 
 
+>>
+import matplotlib.pyplot as plt
+
+1) pyplot can accept arrays or list
+
+plt.plot(months,prices,color='red', linestyle='--')
+plt.plot(months,prices_new, color='green', linestyle='--')
+
+- solid line
+-- dashed line
+-. dashed dot line
+: dotted
+
+xlabel
+ylabel
+title
+
+plt.show()
+
+>>scatter
+plt.scatter(x=months, y=prices, color=red)
+
+>>Histograms
+
+1) Is your data skewed
+2) Is your data centered around the average
+3) Do you have abnormal data points(outliers) in your data
+
+plt.hist(x=prices, bins=3)
+plt.show()
+
+plt.hist(x=prices, bins=6,normed=1)  #the number of observations decrease per bin as the number of bins increase
+
+normalization shows the percentage of observations rather than the frequency counts
+
+
+# Plot histogram of stocks_A
+plt.hist(stock_A, bins=100, alpha=0.4)
+
+# Plot histogram of stocks_B 
+plt.hist(stock_B, bins=100, alpha=0.4)
+
+# Display plot
+plt.show()
+
+
+>>dataset
+
+
+
+
 
 
 

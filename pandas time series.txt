@@ -391,6 +391,35 @@ print(daily_diff)
 # Compute and print the autocorrelation of daily changes
 autocorrelation_daily = daily_diff['US10Y'].autocorr()
 
+The autocorrelation as a function of lag implies that it can be forecast
+non zero autocorrelation imply that it can be forecast
+
+
+The next correlation can be derived from the previous two values
+
+from statsmodels.graphics.tsaplots import plot_acf
+
+plot_acf(x, lags=20, alpha=0.05)
+
+The argument alpha sets the width of the confidence interval
+
+confidence bands are wider if the alpha is lower or your have few observations
+
+Under some simplifying assumptions, 95% confidence bands are +/- 2 divided by sqrt(number of observations)
+
+if alpha is set to 1 then no confidence bads will be plotted
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

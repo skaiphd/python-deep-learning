@@ -1,0 +1,218 @@
+>>Python types
+
+Strings
+Integers
+Floats
+Boolean
+
+>>conditional test
+
+==
+>
+<
+!=
+
+>>string function
+str()
+
+>>slicing list
+mylist[startAt:endBefore]
+
+months=['Jan','Feb','Mar','Apr','May','Jun']
+
+months[2:5]
+Mar, Apr, May
+
+months[3:]
+Apr, May, Jun
+months[:3]
+Jan, Feb, Mar
+
+>>step  mylist[startAt:EndBefore:step]
+
+
+>>list in lists
+
+cpi[['Jan','Feb','Mar'],[238.11,237.81,238.91]]
+
+print(cpi[1])
+
+yields the numeric list
+
+
+print(cpi[1][0])
+return 238.11
+
+>>sort
+prices=cpi[1]
+prices.sort()
+
+
+>>append
+add a single element to a list
+
+months.append('April')
+
+>>extend  - add multiple elements to a list
+months.extend(['May','Jun', 'Jul'])
+
+>>Index - returns the lowest index where the x appears
+month.index('Feb')
+1
+
+>>max and min
+
+min_price=min(prices)
+min_index= prices.index(min_price)
+
+
+>>
+
+prices = [159.54, 37.13, 71.17]
+prices.sort()
+print(prices)
+
+price_max = max(prices)
+print(price_max)
+
+>>
+# Append a name to the list names
+names.append('Amazon.com')
+print(names)
+
+# Extend list names
+more_elements = ['DowDuPont', 'Alphabet Inc']
+names.extend(more_elements)
+print(names)
+
+>>
+
+# Do not modify this
+max_price = max(prices)
+
+# Identify index of max price
+max_index = prices.index(max_price)
+
+# Identify the name of the company with max price
+max_stock_name = names[max_index]
+
+# Fill in the blanks 
+print('The largest stock price is associated with ' + max_stock_name + ' and is $' + str(max_price) + '.')
+
+>>arrays
+import numpy as np
+my_array=np.array([0,1,2,3,4])
+print(my_array)
+
+arrays are more compact
+numerous array functionality in python
+arrays can only contain one data type
+arrays can be indexed and sliced
+
+import numpy as np
+
+# Lists
+prices = [170.12, 93.29, 55.28, 145.30, 171.81, 59.50, 100.50]
+earnings = [9.2, 5.31, 2.41, 5.91, 15.42, 2.51, 6.79]
+
+# NumPy arrays
+prices_array = np.array(prices)
+earnings_array = np.array(earnings)
+
+>>
+import numpy as np
+
+# Create PE ratio array
+pe_array = prices_array/earnings_array
+
+# Print pe_array
+print(pe_array)
+
+>>arrays can be multi dimensional
+
+
+cpi= np.array([months,prices])
+
+cpi=[
+[1,2,3],
+[283.11,237.81,238.91]
+]
+
+print(cpi.shape)
+print(cpi.size)
+print(np.mean(prices))
+print(np.std(prices))
+
+numpy.arange(start,end before,step)
+months=np.arange(1,13)
+
+cpi_transpose= np.transpose(cpi)
+
+>>
+
+import numpy as np
+
+# Create PE ratio array
+pe_array = prices_array/earnings_array
+
+# Print pe_array
+print(pe_array)
+
+
+>>
+months=np.array(['Jan','Feb','Mar','Apr','May','Jun'])
+indexing=np.array([1,3,5])
+subset=months[indexing]
+'Feb','Apr','Jun'
+
+neg_index=np.array([-1,-2])
+subset=months[neg_index]
+'Jun','May'
+
+bool_array=np.array([True,True,True,Flase,False,False])
+subset=months[neg_index]
+Jan, Feb, Mar
+
+
+bool_array=(prices_array>238)
+
+>>
+
+# Find the mean
+price_mean = np.mean(prices)
+
+# Create boolean array
+boolean_array = (prices>price_mean)
+print(boolean_array)
+
+# Select prices that are greater than average
+above_avg = prices[boolean_array]
+print(above_avg)
+
+>>
+
+# Create boolean array
+print(sectors)
+print(names)
+print(sectors.size)
+print(names.size)
+boolean_array = (sectors == 'Health Care')
+print(boolean_array)
+
+# Print only health care companies
+health_care = names[boolean_array]
+print(health_care)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
