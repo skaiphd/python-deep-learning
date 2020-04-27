@@ -1,0 +1,135 @@
+>>Classifications using linear SVC
+
+from sklearn.svm import LinearSVC
+
+wine=sklearn.datasets.load_wine()
+
+svm= LinearSVC()
+svm.fit(wine.data, wine.target)
+svm.score(wine.date,wine.target)
+
+
+
+svm use the hinge less and l2 regularization
+
+Support vectors: a training example not in the flat part of the loss diagram
+
+support vectors include incorrectly classified examples or correctly classified examples that are close to the boundary.
+
+support vectors contribute to the fit
+
+all data points matter to the fit
+
+the length from the support vector to the boundary line is called the margin
+
+all incorrectly classified vectors are support vectors
+
+Support vectors are defined as training examples that influence the decision boundary.
+
+
+>>
+# Train a linear SVM
+svm = SVC(kernel="linear")
+svm.fit(X,y)
+plot_classifier(X, y, svm, lims=(11,15,0,6))
+
+# Make a new data set keeping only the support vectors
+print("Number of original examples", len(X))
+print("Number of support vectors", len(svm.support_))
+X_small = X[svm.support_]
+y_small = y[svm.support_]
+
+# Train a new SVM using only the support vectors
+svm_small = SVC(kernel="linear")
+svm_small.fit(X_small,y_small)
+plot_classifier(X_small, y_small, svm_small, lims=(11,15,0,6))
+
+
+>>Kernel SVMs rbf kernel
+
+from sklearn.svm import SVC
+
+svm=SVC(gamma=1)  #gamma controls the boundary smoothness
+svm=SVC(gamma=0.01)
+
+>>>
+
+# Instantiate an RBF SVM
+svm = SVC()
+
+# Instantiate the GridSearchCV object and run the search
+parameters = {'C':[0.1, 1, 10], 'gamma':[0.00001, 0.0001, 0.001, 0.01, 0.1]}
+searcher = GridSearchCV(svm, parameters)
+searcher.fit(X_train, y_train)
+
+# Report the best parameters and the corresponding score
+print("Best CV params", searcher.best_params_)
+print("Best CV accuracy", searcher.best_score_)
+
+# Report the test accuracy using these best parameters
+print("Test accuracy of best grid search hypers:", searcher.score(X_test, y_test))
+
+>>Comparing Logistic Regression and SVM
+
+logistic regression and support vector machines are a linear classifiers, both can be used with kernels, both can be extended to multiclass
+in logistic regression all data affect the fit
+in svm only support vectors affect fit
+logistic regression can use L1 and L2 penalty
+
+logistic regression
+1. linear_model.LogisticRegression
+2. C hyper parameter (inverse regularization strength)
+3. penalty (type of regularization)
+4. multi-class using multinomial or softmax and solver =lbfgs
+
+SVM
+1. svm.LinearSVC and svm.SVC #Kernel SVM
+2. C hyper parameter (inverse regularization strength)
+3. kernel (type of kernel)
+4. gamma (inverse RBF smoothness)
+
+SGDClassifier: stocastic gradient descent
+
+logreg= SGDClassifier(loss='log')
+linsvm= SGDClassifier(loss='hinge')
+
+regularization is called alpha and is like 1/c
+a big alpha means more regularization
+
+>>>
+
+# We set random_state=0 for reproducibility 
+linear_classifier = SGDClassifier(random_state=0)
+
+# Instantiate the GridSearchCV object and run the search
+parameters = {'alpha':[0.00001, 0.0001, 0.001, 0.01, 0.1, 1], 
+             'loss':['hinge','log'], 'penalty':['l1','l2']}
+searcher = GridSearchCV(linear_classifier, parameters, cv=10)
+searcher.fit(X_train, y_train)
+
+# Report the best parameters and the corresponding score
+print("Best CV params", searcher.best_params_)
+print("Best CV accuracy", searcher.best_score_)
+print("Test accuracy of best grid search hypers:", searcher.score(X_test, y_test))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

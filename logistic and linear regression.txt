@@ -1,0 +1,463 @@
+>> Linear Regression
+
+from sklearn.linear_model import LogisticRegression
+import sklearn.dataset
+
+reg=LinearRegression()
+reg.fit(X_rooms,y)
+prediction_space=np.linspace(min(X_rooms),max(X_rooms)).reshape(-1,1)
+plt.scatter(X_rooms,y)
+#X_train, X_test,y_train,y_test=train_test_split(X_rooms,y,test_size=0.3,random_state=42)
+plt.ylabel('house price in $1000s')
+plt.xlabel('number of rooms')
+plt.plot(prediction_space, reg.predict(prediction_space),color='black', linewidth=3)
+plt.show()
+#regression.score(X_test,y_test)
+
+
+>>> Logistic Regression
+
+from sklearn.linear_model import LogisticRegression
+import sklearn.datasets
+import matplotlib.pyplot as plt
+import numpy as np
+
+wine=sklearn.datasets.load_wine()
+reg=LogisticRegression()
+
+print(wine.feature_names)
+X=wine.data
+y=wine.target
+X_train, X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=42)
+
+reg.fit(X_train,y_train)
+print(reg.score(X,y))
+row1=np.array(X_train[:1])
+print (reg.predict_proba(alcohol))
+#prediction_space=np.linspace(min(alcohol),max(alcohol)).reshape(-1,1)
+
+
+>>Linear SVC
+
+svm=LinearSVC()
+svm.fit(X_train,y_train)
+print(svm.score(X_train,y_train))
+
+>>non linear SVM
+
+svm=SVC()
+svm.fit(X_train,y_train)
+print(svm.score(X_train,y_train))
+
+
+# Instantiate logistic regression and train
+lr = LogisticRegression()
+lr.fit(X, y)
+
+# Predict sentiment for a glowing review
+review1 = "LOVED IT! This movie was amazing. Top 10 this year."
+review1_features = get_features(review1)
+print(review1_features)
+print("Review:", review1)
+print("Probability of positive review:", lr.predict_proba(review1_features)[0,1])
+
+# Predict sentiment for a poor review
+review2 = "Total junk! I'll never watch a film by that director again, no matter how good the reviews."
+review2_features = get_features(review2)
+print(review2_features)
+print("Review:", review2)
+print("Probability of positive review:", lr.predict_proba(review2_features)[0,1])
+
+
+>>classification 
+
+1. when the y values are categories
+2. decision boundaries are surfaces separating different predicted classes
+3. linear classifier learns linear decisions boundaries
+4. linear separable if it can be perfectly explained by a linear classifier
+5. multi class classification has three or more categories
+
+
+>>plotting the linear boundaries
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC, LinearSVC
+from sklearn.neighbors import KNeighborsClassifier
+
+# Define the classifiers
+classifiers = [LogisticRegression(), LinearSVC(),
+               SVC(), KNeighborsClassifier()]
+
+# Fit the classifiers
+for c in classifiers:
+    c.fit(X, y)
+
+# Plot the classifiers
+plot_4_classifiers(X, y, classifiers)
+plt.show()
+
+
+>>Logistic regression: Positive or negative to determine what side of the boundary your on
+
+lr.coef_
+lr.intercept_
+
+raw model output (negative or positive) predicting either 0 or 1
+
+changing the intercept change the y intercept of the boundary
+changing the coefficients change the slope of the boundary
+
+>>change the y intercept and the slope of the boundary
+
+# Set the coefficients
+model.coef_ = np.array([[-1,1]])
+model.intercept_ = np.array([-3])
+
+# Plot the data and decision boundary
+plot_classifier(X,y,model)
+
+# Print the number of errors
+num_err = np.sum(y != model.predict(X))
+print("Number of errors:", num_err)
+
+>>Loss functions
+
+LinearRegression used a minimize loss function
+loss function tells us how poorly the model is doing at predicting on the training data
+fit is running code to minimize the loss
+
+A natural loss for classification problems it the number of errors made
+0-1 loss  0 for a correct prediction and 1 for and incorrect prediction
+
+from scipy.optimize import minimize
+minimize(np.square,0).x
+
+what coefficients make my squared error as small as possible
+
+
+# The squared error, summed over training examples
+def my_loss(w):
+    s = 0
+    for i in range(y.size):
+        # Get the true and predicted target values for example 'i'
+        y_i_true = y[i]
+        y_i_pred = w@X[i]
+        s = s + (y_i_true - y_i_pred)**2
+    return s
+
+# Returns the w that makes my_loss(w) smallest
+w_fit = minimize(my_loss, X[0]).x
+print(w_fit)
+
+# Compare with scikit-learn's LinearRegression coefficients
+lr = LinearRegression(fit_intercept=False).fit(X,y)
+print(lr.coef_)
+
+>>Loss is the difference between the true and the predicted
+1. sin products a raw model in either positive or negative halves
+a. raw model -1 (incorrect) predict +1 (correct)
+
+logistic loss diagram
+1. loss decreases as the corrections are predicted correctly
+
+hinge loss in svm
+
+# Mathematical functions for logistic and hinge losses
+def log_loss(raw_model_output):
+   return np.log(1+np.exp(-raw_model_output))
+def hinge_loss(raw_model_output):
+   return np.maximum(0,1-raw_model_output)
+
+# Create a grid of values and plot
+grid = np.linspace(-2,2,1000)
+plt.plot(grid, log_loss(grid), label='logistic')
+plt.plot(grid, hinge_loss(grid), label='hinge')
+plt.legend()
+plt.show()
+
+>>log loss
+
+# The logistic loss, summed over training examples
+def my_loss(w):
+    s = 0
+    for i in range(y.size):
+        raw_model_output = w@X[i]
+        s = s + log_loss(raw_model_output * y[i])
+    return s
+
+# Returns the w that makes my_loss(w) smallest
+w_fit = minimize(my_loss, X[0]).x
+print(w_fit)
+
+# Compare with scikit-learn's LogisticRegression
+lr = LogisticRegression(fit_intercept=False, C=1000000).fit(X,y)
+print(lr.coef_)
+
+>>regularization combats overfitting by making the coeffients smaller
+
+coefficient value by coefficient index
+small c means more regularization
+large c means less regularization
+
+lr_weak_reg=LogisticRegression(C=100)
+lr_strong_reg=LogisticRegression(C=0.01)
+
+lr_weak_reg.fit(X_train,y_train)
+lr_strong_reg.fit(X_train,y_train)
+
+lr_weak_reg.score(X_train,y_train)
+lr_strong_reg.score(X_train,y_train)
+
+regularization penalizes large values of the coefficients
+regularized loss= original loss + large coeffient penalty
+
+* more regularization equals lower training accuracy
+
+regularizing causes you to fit less reducing overfitting of the data.
+
+lasso = linear regression with L1 regularization
+ridge= linear regression with L2 regularization
+
+L1 helps with feature selection
+
+>> 
+
+lr_L1 = LogisticRegression(penalty='l1')
+lr_l2 =LogisticRegression()
+
+lr_L1.fit(X_train,y_train)
+lr_L2.fit(X_train,y_train)
+
+plt.plot(lr_L1.coef_.flatten())
+plt.plot(lr_L2.coef_.flatten())
+
+>>
+
+# Train and validaton errors initialized as empty list
+train_errs = list()
+valid_errs = list()
+
+# Loop over values of C_value
+for C_value in [0.001, 0.01, 0.1, 1, 10, 100, 1000]:
+    # Create LogisticRegression object and fit
+    lr = LogisticRegression(C=C_value)
+    lr.fit(X_train, y_train)
+    
+    # Evaluate error rates and append to lists
+    train_errs.append( 1.0 - lr.score(X_train, y_train) )
+    valid_errs.append( 1.0 - lr.score(X_valid, y_valid) )
+    
+# Plot results
+plt.semilogx(C_values, train_errs, C_values, valid_errs)
+plt.legend(("train", "validation"))
+plt.show()
+
+>>Lasso
+
+# Specify L1 regularization
+lr = LogisticRegression(penalty='l1')
+
+# Instantiate the GridSearchCV object and run the search
+searcher = GridSearchCV(lr, {'C':[0.001, 0.01, 0.1, 1, 10]})
+searcher.fit(X_train, y_train)
+
+# Report the best parameters
+print("Best CV params", searcher.best_params_)
+
+# Find the number of nonzero coefficients (selected features)
+best_lr = searcher.best_estimator_
+coefs = best_lr.coef_
+print("Total number of features:", coefs.size)
+print("Number of selected features:", np.count_nonzero(coefs))
+
+
+>>coefficents
+
+# Get the indices of the sorted cofficients
+inds_ascending = np.argsort(lr.coef_.flatten()) 
+inds_descending = inds_ascending[::-1]
+
+# Print the most positive words
+print("Most positive words: ", end="")
+for i in range(5):
+    print(vocab[inds_descending], end=", ")
+print("\n")
+
+# Print most negative words
+print("Most negative words: ", end="")
+for i in range(5):
+    print(vocab[inds_ascending], end=", ")
+print("\n")
+
+>>Logistic regression as a probablity
+
+1. The decision boundary is 0.5  red is >= 0.5 and blue is <0.5
+
+when regularization is turned on C=1 then the model coefficients are closer to .5
+
+old
+model coeffients=[[1.55,1.57]] and model intercept[-0.64]
+
+new
+model coeffients=[[0.45,0.64]] and model intercept[-0.26]
+
+two features equates to two coefficients
+the magnitude give us our confidence level
+the coefficients give the slope of the line
+
+The sigmoid function squashes the raw model output to be between 0 and 1 and .5 we are at the boundary
+
+
+>>
+# Set the regularization strength
+model = LogisticRegression(C=1)
+
+# Fit and plot
+model.fit(X,y)
+plot_classifier(X,y,model,proba=True)
+
+# Predict probabilities on training points
+prob = model.predict_proba(X)
+print("Maximum predicted probability", np.max(prob))
+
+>>
+# Set the regularization strength
+model = LogisticRegression(C=0.1)
+
+# Fit and plot
+model.fit(X,y)
+plot_classifier(X,y,model,proba=True)
+
+# Predict probabilities on training points
+prob = model.predict_proba(X)
+print("Maximum predicted probability", np.max(prob))
+
+>>
+
+lr = LogisticRegression()
+lr.fit(X,y)
+
+# Get predicted probabilities
+proba = lr.predict_proba(X)
+
+# Sort the example indices by their maximum probability
+proba_inds = np.argsort(np.max(proba,axis=1))
+
+# Show the most confident (least ambiguous) digit
+show_digit(proba_inds[-1], lr)
+
+# Show the least confident (most ambiguous) digit
+show_digit(proba_inds[0], lr)
+
+
+>>multi class classifiers
+
+lr0.fit(X,y==0)
+lr1.fit(X,y==1)
+lr2.fit(X,y==2)
+
+lr0.decision_function(X)[0]
+lr1.decision_function(X)[0]
+lr2.decision_function(X)[0]
+
+or
+
+lr.fit(X,y)
+lr.predict(X)[0]
+
+one vs rest
+
+Multinomial or softmax
+
+
+>>one-vs-rest
+lr_ovr=LogisticRegression()
+lr_ovr.fit(X,y)
+lr_ovr.coef_.shape
+
+>>
+lr_mn=LogisticRegression(
+multi_class="multinomial",
+solver="lbfgs")
+lr_mn.fit(X,y)
+
+lrmmn.coef_shape
+
+>>
+
+# Fit one-vs-rest logistic regression classifier
+lr_ovr = LogisticRegression()
+lr_ovr.fit(X_train, y_train)
+
+print("OVR training accuracy:", lr_ovr.score(X_train, y_train))
+print("OVR test accuracy    :", lr_ovr.score(X_test, y_test))
+
+# Fit softmax classifier
+lr_mn = LogisticRegression(multi_class="multinomial", solver="lbfgs")
+lr_mn.fit(X_train, y_train)
+
+print("Softmax training accuracy:", lr_mn.score(X_train, y_train))
+print("Softmax test accuracy    :", lr_mn.score(X_test, y_test))
+
+>>
+# Print training accuracies
+print("Softmax     training accuracy:", lr_mn.score(X_train, y_train))
+print("One-vs-rest training accuracy:", lr_ovr.score(X_train, y_train))
+
+# Create the binary classifier (class 1 vs. rest)
+lr_class_1 = LogisticRegression(C=100)
+lr_class_1.fit(X_train, y_train==1)
+
+# Plot the binary classifier (class 1 vs. rest)
+plot_classifier(X_train, y_train==1, lr_class_1)
+
+>> Non-linear classification
+
+# We'll use SVC instead of LinearSVC from now on
+from sklearn.svm import SVC
+
+# Create/plot the binary classifier (class 1 vs. rest)
+svm_class_1 = SVC()
+svm_class_1.fit(X_train, y_train==1)
+plot_classifier(X_train, y_train==1, svm_class_1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
