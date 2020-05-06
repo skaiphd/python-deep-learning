@@ -1,0 +1,90 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+
+height[62,64,69,75,66,68,65,71,76,73]
+weight[120,136,148,175,137,165,154,172,200,187]
+
+sns.scatterplot(x=height,y=weight)
+plt.show()
+
+
+gender['Female','Female','Female','Female','Male','Male','Male','Male','Male','Male']
+
+sns.countplot(x=gender)
+
+
+sns.countplot(y=region)
+
+# Show plot
+plt.show()
+
+
+participant_id, age, how_masculine, how_important
+
+
+df=pd.read_csv("mascuinity.csv")
+sns.countplot(x="how_masculine",data=df)
+
+>>
+tips=sns.load_dataset("tips")
+tips.head()
+
+total_bill, tip, sex, smoker, day, time, size
+
+sns.scatterplot(x="total_bill", y="tip", data=tips, hue="smoker", hue_order=['Yes','No'])
+plt.show()
+
+hue_colors={'Yes':'black', 'No':'red'}
+
+sns.scatterplot(x="total_bill", y="tip", data=tips, hue="smoker", palette=hue_colors)
+
+hue colors: blue, green, red, cyan, purple, yellow, black, white
+
+
+>> relplot
+
+palette_colors = {'Rural': "green", 'Urban': "blue"}
+
+# Create a count plot of school with location subgroups
+sns.countplot(x='school', data=student_data, hue='location', palette=palette_colors)
+
+>>
+
+# Change this scatter plot to arrange the plots in rows instead of columns
+sns.relplot(x="absences", y="G3", 
+            data=student_data,
+            kind="scatter", 
+            col="study_time")
+
+# Show plot
+plt.show()
+
+>>
+# Change this scatter plot to arrange the plots in rows instead of columns
+sns.relplot(x="absences", y="G3", 
+            data=student_data,
+            kind="scatter", 
+            col="study_time")
+
+# Show plot
+plt.show()
+
+>> col by row
+
+# Adjust further to add subplots based on family support
+sns.relplot(x="G1", y="G3", 
+            data=student_data,
+            kind="scatter", 
+            col="schoolsup",
+            col_order=["yes", "no"],
+            row="famsup",
+            row_order=["yes", "no"])
+
+# Show plot
+plt.show()
+
+
+
+
+

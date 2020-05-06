@@ -1,0 +1,397 @@
+k-means clustering
+1) one of the most popular unsupervised learning methods
+2) simple and fast
+
+k-means assumptions
+1) symmetrical distribution of variables (not skewed)
+2) variables with same average values
+3) variable with the same variance
+
+
+skewed variables
+1) skew is removed with logarithmic transformation
+2) logarithmic transformation only works on positive values
+
+
+variables on the same scale
+1) equal mean
+2) equal variance
+
+>>Exploring distribution of recency
+
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+sns.distplot(datamart['Recency']
+
+next
+
+frequency_log=np.log(df['M_Stage'])
+sns.distplot(frequency_log)
+plt.title('Monetary logarithmic')
+plt.show()
+
+>>
+Dealing with negative values
+
+Add a constant before log transformation
+
+Add the absolute value of the lowest value of each observation.
+
+>>identifying an issue
+
+analyze key statistics of the dataset
+compare mean and standard deviation
+
+>>Centering variables
+
+1) k-means works well on variables with the same mean
+2) centering variables is done by calculating the average value and subtracting the value from each observation.
+
+
+datamart_centered= datamart_rfm - datamart_rfm.mean()
+datamart_centered.describe().round(2)
+
+>>Scaling variables with different variance
+1. K-means works better on variables with the same variance/standard deviation
+2. Scaling variables is done by dividing them by standard deviation of each
+
+datamart_scaled=datamart_rfm / datamart_rfm.std()
+datamart_scaled.describe().round(2)
+
+ndarray
+
+>>Combining centering and scaling
+1) Subtract mean and divide by standard deviation manually
+
+from sklean.preprocessing import StandardScaler
+
+scaler=StandardScaler()
+scaler.fit(datamart_rfm)
+datamart_normalized=scaler.transform(datamart_rfm)
+print('mean: ', datamart_normalized.mean(axis=0).round(2))
+print('std: ', datamart_normalized.std(axis=0).round(2))
+
+
+>>Manually centers and scaled
+
+# Center the data by subtracting average values from each entry
+data_centered = data - data.mean()
+
+# Scale the data by dividing each entry by standard deviation
+data_scaled = data / data.std()
+
+# Normalize the data by applying both centering and scaling
+data_normalized = (data - data.mean()) / data.std()
+
+# Print summary statistics to make sure average is zero and standard deviation is one
+print(data_normalized.mean().round(2))
+
+>>Scaling and Centering using sklearn
+
+# Initialize a scaler
+scaler = StandardScaler()
+
+# Fit the scaler
+scaler.fit(data)
+
+# Scale and center the data
+data_normalized = scaler.transform(data)
+
+# Create a pandas DataFrame
+data_normalized = pd.DataFrame(data_normalized, index=data.index, columns=data.columns)
+
+# Print summary statistics
+print(data_normalized.describe().round(2))
+
+>>>Why the sequence matters
+1. Log transformation only with positive data
+2. Normalization forces data to have negative values and log will not work
+
+Sequence
+1. Unskew the data with the log transformation
+2. Standardize to the same average values
+3. Scale to the same standard deviation
+4. Store as a separate array to used for clustering
+
+
+import numpy as np
+from sklean.preprocessing import StandardScaler
+datamart_log=np.log(datamart_rfm)
+scaler=StandardScaler()
+scaler.fit(datamart_log)  #centering and scaling
+
+atamart_normalized=scaler.transform(datamart_log)
+
+data_normalized = pd.DataFrame(data_normalized, index=data.index, columns=data.columns)
+
+
+>>>RFM summarize
+
+# Plot recency distribution
+plt.subplot(3, 1, 1); sns.distplot(datamart_rfm['Recency'])
+
+# Plot frequency distribution
+plt.subplot(3, 1, 2); sns.distplot(datamart_rfm['Frequency'])
+
+# Plot monetary value distribution
+plt.subplot(3, 1, 3); sns.distplot(datamart_rfm['MonetaryValue'])
+
+# Show the plot
+plt.show()
+
+# Unskew the data
+datamart_log = np.log(datamart_rfm)
+
+# Initialize a standard scaler and fit it
+scaler = StandardScaler()
+scaler.fit(datamart_log)
+
+# Scale and center the data
+datamart_normalized = scaler.transform(datamart_log)
+
+# Create a pandas DataFrame
+datamart_normalized = pd.DataFrame(data=datamart_normalized, index=datamart_rfm.index, columns=datamart_rfm.columns)
+
+# Plot recency distribution
+plt.subplot(3, 1, 1); sns.distplot(datamart_normalized['Recency'])
+
+# Plot frequency distribution
+plt.subplot(3, 1, 2); sns.distplot(datamart_normalized['Frequency'])
+
+# Plot monetary value distribution
+plt.subplot(3, 1, 3); sns.distplot(datamart_normalized['MonetaryValue'])
+
+# Show the plot
+plt.show()
+
+>>>K-means Clustering
+
+1. Data pre-processing
+2. Choosing a number of clusters
+3. Running k-means clustering on pre-processed data
+4. Analyzing average RFM values of each cluster
+
+datamart_rfm #raw
+datamart_normalized #normalized
+
+>>Methods to define the number of clusters
+1. elbow criterion
+2. silhouette coefficient
+3. experimentation and interpretation
+
+from sklearn.cluster import KMeans
+kmeans= KMeans(n_clusters=2, random_state=1)
+
+kmeans.fit(datamart_normalized)
+
+cluster_labels=kmeans.labels_
+
+datamart_rfm_k2 = datamart_rfm.assign(Cluster=cluster_labels)
+
+datamart_rfm_k2.groupby(['Cluster']).agg(
+{
+	'Recency':'mean',
+	'Frequency':'mean',
+	'MonetaryValue': ['mean','count']
+}).round(0)
+
+
+>>>
+
+# Import KMeans 
+from sklearn.cluster import KMeans
+
+# Initialize KMeans
+kmeans = Kmeans(n_clusters=3, random_state=1) 
+
+# Fit k-means clustering on the normalized data set
+kmeans.fit(datamart_normalized)
+
+# Extract cluster labels
+cluster_labels = kmeans.labels_
+
+# Create a DataFrame by adding a new cluster label column
+datamart_rfm_k3 = datamart_rfm.assign(Cluster=cluster_labels)
+
+# Group the data by cluster
+grouped = datamart_rfm_k3.groupby(['Cluster'])
+
+# Calculate average RFM values and segment sizes per cluster value
+grouped.agg({
+    'Recency': 'mean',
+    'Frequency': 'mean',
+    'MonetaryValue': ['mean', 'count']
+  }).round(1)
+
+>>>Elbow criterion
+1.Plot the number of clusters against within-cluster sum-of-squared-errors
+sum of squared distances from every point to their cluster center
+2. identify the elbow in the plot
+3. elbow - a point representing an optimal number of clusters
+
+from sklearn.cluster import KMeans
+import seaborn as sns
+from matplotlib import pyplot as plt
+
+sse={}
+
+for k in range(1,11):
+	kmeans=KMeans(n_clusters=k,random_state=1)
+	kmeans.fit(data_normalized)
+	sse[k]=kmeans.inertia_
+
+
+plt.title('The Elbow Method')
+plt.xlabel('k')
+plt.ylabel('sse')
+sns.pointplot(x=list(see.keys()), y=list(sse.values()))
+plt.show()
+
+
+>>build persona
+1. snake plots
+
+datamart_rfm_k2= datamart_rfm.assign(Cluster=cluster_labels)
+
+datamart_rfm_k2.groupby(['Cluster']).agg(
+# Create a DataFrame by adding a new cluster label column
+datamart_rfm_k3 = datamart_rfm.assign(Cluster=cluster_labels)
+
+# Group the data by cluster
+grouped = datamart_rfm_k3.groupby(['Cluster'])
+
+# Calculate average RFM values and segment sizes per cluster value
+grouped.agg({
+    'Recency': 'mean',
+    'Frequency': 'mean',
+    'MonetaryValue': ['mean', 'count']
+).round(0)
+
+
+# Melt the normalized dataset and reset the index
+datamart_melt = pd.melt(
+  					datamart_normalized.reset_index(), 
+                        
+# Assign CustomerID and Cluster as ID variables                  
+                    id_vars=['CustomerID', 'Cluster'],
+
+# Assign RFM values as value variables
+                    value_vars=['Recency', 'Frequency', 'MonetaryValue'], 
+                        
+# Name the variable and value
+                    var_name='Metric', value_name='Value'
+					)
+
+
+
+# Add the plot title
+plt.title('Snake plot of normalized variables')
+
+# Add the x axis label
+plt.xlabel('Metric')
+
+# Add the y axis label
+plt.ylabel('Value')
+
+# Plot a line for each value of the cluster variable
+sns.lineplot(data=datamart_melt, x='Metric', y='Value', hue='Cluster')
+plt.show()
+
+# Calculate average RFM values for each cluster
+cluster_avg = datamart_rfm_k3.groupby(['Cluster']).mean() 
+
+# Calculate average RFM values for the total customer population
+population_avg = datamart_rfm.mean()
+
+# Calculate relative importance of cluster's attribute value compared to population
+relative_imp = cluster_avg / population_avg - 1
+
+# Print relative importance score rounded to 2 decimals
+print(relative_imp.round(2))
+
+# Initialize a plot with a figure size of 8 by 2 inches 
+plt.figure(figsize=(8, 2))
+
+# Add the plot title
+plt.title('Relative importance of attributes')
+
+# Plot the heatmap
+sns.heatmap(data=relative_imp, annot=True, fmt='.2f', cmap='RdYlGn')
+plt.show()
+
+
+>>>Project
+
+# Import KMeans 
+from sklearn.cluster import KMeans
+
+# Initialize KMeans
+kmeans = KMeans(n_clusters=4, random_state=1) 
+
+# Fit k-means clustering on the normalized data set
+kmeans.fit(datamart_rfmt_normalized)
+
+# Extract cluster labels
+cluster_labels = kmeans.labels_
+
+# Create a new DataFrame by adding a cluster label column to # Create a new DataFrame by adding a cluster label column to datamart_rfmt
+
+datamart_rfmt_k4 = datamart_rfmt.assign(Cluster=cluster_labels)
+
+# Group by cluster
+grouped = datamart_rfmt_k4.groupby(['Cluster'])
+
+# Calculate average RFMT values and segment sizes for each cluster
+grouped.agg({
+    'Recency': 'mean',
+    'Frequency': 'mean',
+    'MonetaryValue': 'mean',
+    'Tenure': ['mean', 'count']
+  }).round(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

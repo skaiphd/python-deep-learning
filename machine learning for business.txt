@@ -1,0 +1,381 @@
+
+1. draw causal insight and answer the why questions (what is causing)
+2. predict future events (which customers)
+3. understanding pattern in data (are there groups of customers)
+a. groups that behave in a certain way
+
+Data hierarchy of needs
+1. collection (extract data from source systems)
+2. storage (reliable storage)
+3. preparation (organize and clean data to make it usable)
+4. analysis (understanding trends, distributions and segments) (key indicators, dashboards)
+5. machine learning, customer satisification (simple models) (prototyping and testing ml)
+6. ml in production (crm, mobile, research, and automation)
+
+unsupervised learning uses data points and assign similar groups into segments.
+
+1. predict which customers are likely to purchase next month
+2. predict each customer's expected lifetime value
+a. determining who are the high value customers
+b. use unsupervised learning
+3. predict customer behaviors like default
+
+unsupervised learning is used to group transactions into segments based on their attributes to understand which segments are the most profitable.
+
+supervised learning
+predict which items in production are likely faulty and should be manually inspected.
+predict which machines are likely to break and need maintenance.
+
+unsupervised learning group readings from machine sensors and identify anomolies for potential manufacturing malfunctions.
+
+machine learning in transportation
+a. predicted the expected delivery of the parcel
+b. identify the fastest route for driving
+c. predict production demand to prepare enough stock, rent/buy vehicles and hire workers
+
+
+Job roles, tools and technologies
+
+1. collection : (software engineers)
+2. storage : (data engineers and software engineers - focus on data pipelines)
+3. preparation: (data engineers, data analyst - usable data sets)
+4. analysis (data analysts, data scientist - dashboards and score cards and analyze trends and machine learning methods to find data signal)
+5. ml in production : (ml engineers - mobile and crm)
+
+team structure
+1. centralized (all data functions are in one functional team.  works well for small companies)
+2. decentralized (each business unit has their own data functions. results in siols, redundancies and adds complexity)
+3. hybrid (infrastructure)
+
+
+prediction vs inference dilemma
+
+inference or causal models: the goal is to understand the drivers of a business outcome
+a) what are the main indicators of churn
+b) what are the drivers of fraud
+c) what features are the stickest
+d) provide interpretable insights (interpretable means that its is easy to explain what the model does)
+e) less accurate than prediction models.
+
+
+prediction
+a) get the best prediction no matter how complex the model is.
+b) work more like a black box.
+c) more accurate than inference
+
+what are the main drivers of fraud (inferences)
+
+how much conditions x impact heart attack (inferences)
+which transactions are likely of fraud (prediction)
+is the patient at risk of having a heart attack (prediction)
+
+
+inference are interested in how much the attributes affect the outcome probability.
+
+
+inference models
+
+what is causality
+
+identify causal relationship of how much certain actions affect an outcome of interest
+
+answer the why questions
+optimizes for model interpretability ver performance
+
+experiments are designed and causal conclusions are guaranteed
+
+experiments are not possible, observation data must be used to determine what data is causual associated.
+ Comparision between healthy class and unhealthy class of people.
+a.) use periodic experiment results to make decisions
+b.) build an inference model.
+
+
+Inference
+regression coefficients tell us how much the feature input affect the outcome
+
+
+supervised model
+
+a. predicting class/type of an outcome (classification)
+
+b. predicting quantity of outcome (dollars spent, hours played) - regression
+
+unsupervised models
+
+clustering - grouping observations into similar groups or clusters (customer segmentation and market segmentation)
+
+supervised learning types: classification (categorical) and regression (contineous amounts)
+
+
+machine learning teams collect data to predict the maximum outcome possible.
+a) customer information
+b) purchase history
+c) job cancelations
+d) order amounts
+e) change order amounts
+
+
+learn the rules to predict on unseen data, predict probability of the result.
+
+in regression training, predict an amount for an outcome
+
+unsupervised learning models
+
+1. Clustering grouping observations into similar groups or clusters 
+a. customer segmentation
+b. market segmentation
+
+Anomaly detection - detecting which observations fall out of the discovered "regular patterns" and use it as an input in supervisored learning or business input
+
+recommendation 
+
+example
+a. Monetary Value, Recency, Frequency
+
+The algorithm identifies similar segments or clusters
+
+
+gathering business requirements
+
+a. what is the business situation
+b. assess the business opportunity by identifying the right markets with the biggest demand
+c. what are the business actions to take. Prioritize and invest more in markets with higher predicted demand
+- fraud detection (situation, opportunity, and action)
+- business churn
+
+situation
+1. Ask the right questions
+2. Start with inference questions ( why or which or how questions)
+3. Build on the inference question to define the prediction question (identify or measure)
+
+opportunity
+1. don't spend more than you make (rule 1)
+2. Size up the opportunity
+a. once you know the drivers of outcome, how much will it cost changing them and what will be the value of doing that
+b. how do you know if you can affect the predicted outcome
+
+action
+a. even if the predictions are very accurate they may not be actionable
+b. look at the historical levels
+c. run experiments and if the experiments have an impact on the targeted group.  If yes, use that to calculate opportunity and make decisions if its a worthwhile investment.
+if no then collect more data and do qualitative research and narrow down the business question.
+
+
+>>>model training
+
+take the input features and target and train the model to predict on future data.
+
+ways to measure classification performance
+1. accuracy
+2. recall
+3. precision
+
+churn example
+a. purchases this year
+b. number of customer complaints
+
+accuracy is all correct predictions / all observations ( true positives)
+
+precision is the correct predictions/ all observations predicted of that class
+
+recall is the correct predictions/ all actual observations  (true positive/ (true positive + false negatives))
+
+there is always tension between precision and recall
+
+>>machine learning risks
+1. low precision (only a small percentage of true positives are captured by the model)
+2. low recall (small portion of the observations are captured by the model)
+3. large error (regression you might get a large error when comparing actual to the predicted)
+what is the cost to a mistake
+
+How to test the model correctly
+
+how to a/b test a model
+
+a. at risk, run retention campaing
+b. business as usual
+
+measure the experiment against usual
+
+What if test don't work?
+1. get more data
+2. business has experience of what is predictive
+3. build causal models to understand drivers
+4. change the scope of the problem
+
+Mistakes
+
+1. Machine learning first
+2. not enough data
+3. target variable definition
+4. late testing, no impact
+5. feature selection
+
+Target variable definition:
+a. what are you predicting.
+b. Can we observe it (in depth analysis, business involved to define definition)
+
+feature selection
+a. inference - what affects the target variable (latency, price, delivery, customer service)
+
+
+late testing, no impact (determine if any significant difference occurs)
+
+Communication
+1. Schedule recurring meetings to track progress and define the following:
+a. Define the business requirements
+b. Review machine learning model and business products
+c. Define inference versus prediction use cases
+d. Baseline model results & outline model updates
+e. Market testing
+
+Business Requirements
+a. What is the business situation
+b. What is the opportunity size? (expected quantity)
+c. What business actions will we take (what are the targets)
+
+1. inference into drivers of churn updated quarterly
+a. daily customer classification into lost customers, customers at risk, no risk
+
+2. real time list of risky transactions
+
+
+All models are wrong but some are useful.  They will make mistakes.  The business will need to decide the tolerance for model mistakes.
+
+identify what is the tolerance for model mistakes
+a. classification - which class is more expenisve to mis-classify
+
+regression
+
+
+the business will have to decide how much more they will spend on waste resource because of the error.
+
+what is the error tolerance for prediction
+
+machine learning in production
+a. are test results delivering consistent positive improvements?
+b. is the model stable enough
+c. Do we have systems and tools where the model should be integrated to
+
+Steps to a target variable>>>
+Define the target variable
+Build a machine learning model predicting the outcome
+Select customers with the predicted values and split into 2 groups a/b
+Run certain actions eg marketing campaign, for group A and no actions for group B
+Measure group A performance vs group B and conclude if there was an impact on the desired outcome
+
+
+>>>>Production systems
+
+1. Customer Relationship Management (crm)
+2. Fraud detection system
+3. Online banking platform
+4. Autonomous cars
+
+Customer relationships (campaigns)
+
+Fraud detections automatically triggers transaction black and requests a manual review
+
+Online banking platform
+a.) discover customer behaviors
+b.) help discover new products, a recommendor engine, customizing the web experience by only showing relevant products
+
+staffing
+a.) prototyping ml is done by data scientist and ml engineers
+b.) ml in production is done by software engineers and data engineers and infrastructure owners
+
+launch
+a.) murphs law
+b.) launch to a small subset of customers
+c.) track results for consistency
+d.) track performance, stability, customer feedback
+e.) scale up
+f.) repeat 3,4,5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

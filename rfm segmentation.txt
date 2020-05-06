@@ -1,0 +1,187 @@
+RFM segmentation (recency, frequency, monetary)
+1) recency (customers last purchase)
+2) frequency (how many purchases the customer has done in the last 12 months)
+3. monetary value (how much has the customer spent)
+
+group the customer into segments: high, medium, or low
+
+1. percentiles e.g quantiles
+2. Pareto 80/20
+3. Custom
+
+percentiles
+1. sort customers based on that metric
+2. break customers into a pre-defined number of groups of equal size
+3. Assign a label to each group
+
+
+
+spend_quartiles = pd.qcut(data['Spend'], q=4, labels=range(1,5))  #four groups of equal sizes called quartiles
+
+
+>>assigning labels
+Quartiles help segment customers by their usage behavior.
+
+r_labels = list(range(4,0,-1))
+
+recency_quartiles=pd.qcut(data['Recency_Days'],q=4, labels=r_labels
+
+data['Recency_Quartile']=recency_quartiles
+
+data.sort_values('Recency_Days')
+
+#The lower the recency the higher the quartile value
+
+#descending order
+
+r_labels=['Active','Lapsed','Inactive','Churned']
+
+recency_quartiles=pd.qcut(data['Recency_Days'],q=4, labels=r_labels
+
+data['Recency_Quartile']=recency_quartiles
+
+data.sort_values('Recency_Days')
+
+>>
+
+# Create a spend quartile with 4 groups - a range between 1 and 5
+spend_quartile = pd.qcut(data['Spend'], q=4, labels=range(1,5))
+
+# Assign the quartile values to the Spend_Quartile column in data
+data['Spend_Quartile'] = spend_quartile
+
+# Print data with sorted Spend values
+print(data.sort_values('Spend'))
+
+
+>>How to calculate RFM for each customer
+a) recency is the days since the last customer transaction
+b) frequency calculates the number of transactions in the last 12 months
+c) monetary value spend in the last 12 months
+
+totalsum = Quantity * UnitPrice
+
+
+print('Min:{}; Max:{}'.format(min(online.InvoiceDate),max(online.InvoiceDate)))
+
+snapshot_date= max(online.InvoiceDate)+ datetime.timedelta(days=1)  #add one day to the date
+
+datamart = online.groupby(['CustomerID'].agg({
+	'InvoiceDate':lambda x: (snapshot_date - x.max()).days,
+	'InvoiceNo':'count',
+	'TotalSum':'sum'
+})
+
+datamart.rename(columns= {
+		'InvoiceDate':'Recency',
+		'InvoiceNo':'Frequency',
+		'TotalSum':'MonetaryValue'), inplace=True
+)
+
+>>Recency Quartile
+
+r_labels = range(4,0,-1)
+f_labels=range(1,5) #frequency and monetary are consider better with higher values
+m_labels=range(1,5)
+
+r_quartiles=pd.qcut(datamart['Recency'],4,labels=r_labels)
+f_quartiles=pd.qcut(datamart['Frequency'],4,labels=f_labels)
+m_quartiles=pd.qcut(datamart['MonetaryValue'],4,labels=m_labels)
+
+
+datamart=datamart.assign(R=r_quartiles.values)
+datamart=datamart.assign(F=f_quartiles.values)
+datamart=datamart.assign(M=m_quartiles.values)
+
+
+def join_rfm(x): return str(x['R'])+str(x['F'])+str(x['M'])
+
+datamart['RFM_Segment']= datamart.apply(join_rfm, axis=1)
+
+datamart['RFM_Score']=datamart[['R','F','M']].sum(axis=1)  #sum across the columns
+
+print(datamart['RFM_Score'].head())
+
+
+datamart.groupby('RFM_Segment').size().sort_values(ascending=False)[:10]
+
+>>
+datamart.groupby('RFM_Score').agg({
+'Recency':'mean',
+'Frequency':'mean',
+'MonetaryValue':['mean','count']
+}).round(1)
+
+def segment_me(df):
+	if df['RFM_Score'] >=9:
+		return 'Gold'
+	elsif(df['RFM_Score']>=5) and (df['RFM_Score']<9):
+		return 'Silver'	
+	else:
+		return 'Bronze'
+
+datamart['General_Segment']=datamart.apply(segment_me,axis=1)
+
+
+datamart.groupby('General_Segment').agg({
+'Recency':'mean',
+'Frequency':'mean',
+'MonetaryValue':['mean','count']
+}).round(1)
+
+>>
+# Define rfm_level function
+def rfm_level(df):
+    if df['RFM_Score'] >=10:
+        return 'Top'
+    elif ((df['RFM_Score'] >=6) and (df['RFM_Score'] < 10)):
+        return 'Middle'
+    else:
+        return 'Low'
+
+# Create a new variable RFM_Level
+datamart['rfm_level'] = datamart.apply(rfm_level, axis=1)
+
+# Print the header with top 5 rows to the console
+print(datamart.head(5))
+
+>>
+
+rfm_level_agg = datamart.groupby('RFM_Level').agg({
+    'Recency': 'mean',
+    'Frequency': 'mean',
+  
+  	# Return the size of each segment
+    'MonetaryValue': ['mean', 'count']
+}).round(1)
+
+# Print the aggregated dataset
+print(rfm_level_agg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
