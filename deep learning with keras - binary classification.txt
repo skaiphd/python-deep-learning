@@ -1,0 +1,281 @@
+x and y coordinates and labels 0 or 1 representing the colors
+
+import seaborn as sns
+
+sns.pairplot(circles, hue="target")
+
+topology 
+
+1. two input layer one for x and y
+2. four hidden layer
+3. one output layer
+
+sigmoid function = 1/(1+e**-Z)
+>>>
+
+model= Sequential()
+
+model.add(Dense(4, input_shape=(2,),
+activation='sigmoid'
+))
+
+#model.add(Dense(50, activation='relu'))
+model.add(Dense(1))
+
+model.compile(optimizer=Adam(0.01),loss='binary_crossentropy')
+#model.compile(optimizer=Adam(0.01),loss='mae')
+
+model.summary()
+
+plot_model(model, to_file='model.png')
+img=plt.imread('model.png')
+plt.imshow(img)
+plt.show()
+
+model.compile(optimizer='sgd',loss='binary_crossentropy')
+
+model.train(coordinates, labels, epochs=20)
+
+preds= model.predict(coordinates)
+
+
+>>>
+
+variance, skewness, kurtosis, entropy, class
+
+# Import seaborn
+import seaborn as sns
+
+print(banknotes.keys)
+
+# Use pairplot and set the hue to be our class
+sns.pairplot(banknotes, hue='class') 
+
+# Show the plot
+plt.show()
+
+# Describe the data
+print('Dataset stats: \n', banknotes.describe)
+
+# Count the number of observations of each class
+print('Observations per class: \n', banknotes['class'].value_counts)
+
+>> multi class classification
+
+xCoord, yCoord competitor
+
+1. 2 input, 128 dense, 64 dense, 32 dense, 4 outputs
+
+softmax
+.6 Michael
+.1 Susan
+.2 Kate
+.1 Steve
+
+
+model.add(Dense(4, activation='softmax'))
+model.compile(optimizer='adam', loss='categorical_crossentropy')
+
+The log loss decreases as the model becomes more accurate in predicting.
+
+
+>>>>>To Categorical
+>>2 input, [128,64,32] hidden layer, 4 output
+
+import pandas as pd
+from keras.utils import to_categorical
+
+df=pd.read_csv('data.csv')
+
+df.response=pd.Categorical(df.response)
+df.response=df.response.cat.codes
+
+#turn response variable into one-hot encode response vector
+y=to_categorical(df.response)
+
+>>>
+# Import to_categorical from keras utils module
+from keras.utils import to_categorical
+
+# Instantiate a sequential model
+model = Sequential()
+  
+# Add 3 dense layers of 128, 64 and 32 neurons each
+model.add(Dense(128, input_shape=(2,), activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+  
+# Add a dense layer with as many neurons as competitors
+model.add(Dense(4, activation="softmax"))
+  
+# Compile your model using categorical_crossentropy loss
+model.compile(loss="categorical_crossentropy",
+              optimizer='adam',
+              metrics=['accuracy'])
+              
+model.summary()
+
+
+
+# Transform into a categorical variable
+darts.competitor = pd.Categorical(darts.competitor)
+
+# Assign a number to each category (label encoding)
+darts.competitor = darts.competitor.cat.codes 
+
+# Print the label encoded competitors
+print('Label encoded competitors: \n',darts.competitor.head())
+
+# Transform into a categorical variable
+darts.competitor = pd.Categorical(darts.competitor)
+
+
+# Use to_categorical on your labels
+coordinates = darts.drop(['competitor'], axis=1)
+competitors = to_categorical(darts.competitor)
+
+# Now print the to_categorical() result
+print('One-hot encoded competitors: \n',competitors)
+
+# Train your model on the training data for 200 epochs
+model.fit(coord_train,competitors_train,epochs=200)
+
+# , your model accuracy on the test data
+accuracy = model.evaluate(coord_test, competitors_test)[1]
+
+# Print accuracy
+print('Accuracy:', accuracy)
+
+# Predict on coords_small_test
+preds = model.predict(coords_small_test)
+
+# Print preds vs true values
+print("{:45} | {}".format('Raw Model Predictions','True labels'))
+for i,pred in enumerate(preds):
+  print("{} | {}".format(pred,competitors_small_test[i]))
+
+# Predict on coords_small_test
+preds = model.predict(coords_small_test)
+
+# Print preds vs true values
+print("{:45} | {}".format('Raw Model Predictions','True labels'))
+for i,pred in enumerate(preds):
+  print("{} | {}".format(pred,competitors_small_test[i]))
+
+# Extract the indexes of the highest probable predictions
+preds = [np.argmax(pred) for pred in preds]
+
+# Print preds vs true values
+print("{:10} | {}".format('Rounded Model Predictions','True labels'))
+for i,pred in enumerate(preds):
+  print("{:25} | {}".format(pred,competitors_small_test[i]))
+
+
+>>> multi-label
+
+model=Sequential()
+
+model.add(Dense(2,input_shape=(1,)))
+
+model.add(Dense(3,activation='sigmoid'))
+
+#each output will be between 0 and 1
+
+model.compile(optimizer='adam', loss='binary_crossentropy')
+model.fit(X_train, y_train, epochs=100, validation_split=0.2)
+
+#one versus rest classification
+
+#sensor measurements result in parcels to water
+
+Multi-label classification problems differ from multi-class problems in that each observation can be labeled with zero or more classes. So classes are not mutually exclusive. 
+
+To account for this behavior what we do is have an output layer with as many neurons as classes but this time, unlike in multi-class problems, each output neuron has a sigmoid activation function. This makes the output layer able to output a number between 0 and 1 in any of its neurons.
+
+>>
+
+# Instantiate a Sequential model
+
+model=Sequential()
+
+# Add a hidden layer of 64 neurons and a 20 neuron's input
+
+model.add(Dense(64,input_shape=(20,),activiation='relu'))
+
+# Add an output layer of 3 neurons with sigmoid activation
+model.add(Dense(3,activation='sigmoid'))
+
+# Compile your model with adam and binary crossentropy loss
+model.compile(optimizer="adam",
+           loss='binary_crossentropy',
+           metrics=['accuracy'])
+
+model.summary()
+
+# Train for 100 epochs using a validation split of 0.2
+model.fit(sensors_train, parcels_train, epochs = 100, validation_split = 0.2)
+
+# Predict on sensors_test and round up the predictions
+preds = model.predict(sensors_test)
+preds_rounded = np.round(preds)
+
+# Print rounded preds
+print('Rounded Predictions: \n', preds_rounded)
+
+# Evaluate your model's accuracy on the test data
+accuracy = model.evaluate(sensors_test, parcels_test)[1]
+
+# Print accuracy
+print('Accuracy:', accuracy)
+
+
+>>callbacks
+1) EarlyStopping
+2) ModelCheckpoint
+3) History
+
+print(history.history['loss'])
+print(history.history['acc'])
+print(history.history['val_loss'])
+print(history.history['val_acc'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

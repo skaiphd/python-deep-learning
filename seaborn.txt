@@ -84,6 +84,18 @@ sns.relplot(x="G1", y="G3",
 # Show plot
 plt.show()
 
+>>>size
+
+sns.relplot(x='total_bill'
+, y='tip'
+, data=tips
+, kind='scatter'
+,size='size')
+
+plt.show()
+
+
+
 
 
 
