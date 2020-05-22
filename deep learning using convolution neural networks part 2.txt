@@ -1,0 +1,315 @@
+>>>Convolutions
+
+using correlations in images
+1. natural images contain spatial correlations
+2. pixels along a contour or edge have similar patterns
+3. how do we use these correlations
+
+array = np.array([1, 0, 1, 0, 1, 0, 1, 0, 1, 0])
+kernel = np.array([1, -1, 0])
+conv = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+# Output array
+for ii in range(8):
+    conv[ii] = (kernel * array[ii:ii+3]).sum()
+
+# Print conv
+print(conv)
+
+kernel = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+result = np.zeros(im.shape)
+
+# Output array
+for ii in range(im.shape[0] - 3):
+    for jj in range(im.shape[1] - 3):
+        result[ii, jj] = (im[ii:ii+3, jj:jj+3] * kernel).sum()
+
+# Print result
+print(result)
+
+
+from keras.layers import Conv2D
+
+#10 convolutions
+Conv2D(10, kernel_size=3, activation='relu')
+
+#a convolution has one weight in the kernel
+#a kernel size of 3 means it has nine pixels or 90 parameters
+
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten
+
+model=Sequential()
+model.add(Conv2D(10, kernel_size=3 activation='relu',
+input_shape=(img_rows, img_cols,1)))
+
+#flattens into a 1 dimensional array
+model.add(Flatten())
+
+#10 features maps of 28 x 28
+
+model.add(Dense(3,activation='softmax'))
+
+model.compile(optimizer='adam',
+	loss='categorical_crossentropy',
+	metrics=['accuracy'])
+
+model.fit(train_data, train_labels, validation_split=0.2,
+epochs=3)
+
+model.evaluate(test_data, test_labels, epochs=3)
+
+>>>Sample
+
+# Import the necessary components from Keras
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten
+
+# Initialize the model object
+model = Sequential()
+
+# Add a convolutional layer
+model.add(Conv2D(10, kernel_size=3, activation='relu', 
+               input_shape=(img_rows,img_cols,1)))
+
+# Flatten the output of the convolutional layer
+model.add(Flatten())
+# Add an output layer for the 3 categories
+model.add(Dense(3, activation='softmax'))
+
+# Compile the model 
+
+model.compile(optimizer='adam',
+	loss='categorical_crossentropy',
+	metrics=['accuracy'])
+
+# Fit the model on a training set
+model.fit(train_data, train_labels, 
+          validation_split=0.20, 
+          epochs=3, batch_size=10)
+
+model.evaluate(test_data,test_labels, batch_size=10)
+
+#the convolution is zero padded around the image
+
+
+>>>Zero padding in Keras
+
+model.add(Conv2D(10, kernels_size=3, activation='relu',
+	input_shape(img_rows, img_cols, 1)),
+	padding='valid')
+
+where as
+
+model.add(Conv2D(10, kernels_size=3, activation='relu',
+	input_shape(img_rows, img_cols, 1)),
+	padding='same')
+
+#zero padding will be applied with padding=same
+
+>>Stride affects the output of the network
+- stride represents
+
+#a kernel of 3 converts the 3x3 matrix into one pixel in the output.
+#zero pad creates an output matrix the same size as the zero pad image
+
+keras.layers.Conv2D(filters, kernel_size, strides=(1, 1),
+  padding='valid', data_format=None, dilation_rate=(1, 1),
+  activation=None, use_bias=True, kernel_initializer='glorot_uniform',
+  bias_initializer='zeros', kernel_regularizer=None,
+  bias_regularizer=None, activity_regularizer=None,
+  kernel_constraint=None, bias_constraint=None)
+
+https://www.sciencedirect.com/topics/computer-science/convolution-filter
+
+The convolution filters use local neighbors to compute the weighted average, and each pixel is used multiple times by its neighbors
+
+strides is the interval that the kernel jumps
+
+O=((I-K+2P)/S)+1
+
+I=size of the input
+K=size of the kernel
+P=size of the zero padding
+S=strides
+
+>>Dilated convolutions
+
+model.add(Conv2D(10,kernel_size=3, activation='relu',
+input_shape(img_row, img_cols, 1)), dilation_rate=2)
+
+
+>>>Sample
+
+# Initialize the model
+model = Sequential()
+
+# Add the convolutional layer
+model.add(Conv2D(10, kernel_size=3, activation='relu', 
+                 input_shape=(img_rows, img_cols, 1), 
+                padding="same"))
+
+# Feed into output layer
+model.add(Flatten())
+model.add(Dense(3, activation='softmax'))
+
+>> Sample 2
+
+# Initialize the model
+model = Sequential()
+
+# Add the convolutional layer
+model.add(Conv2D(10, kernel_size=3, activation='relu', 
+              input_shape=(img_rows, img_cols, 1), 
+              strides=2))
+
+# Feed into output layer
+model.add(Flatten())
+model.add(Dense(3, activation='softmax'))
+
+
+(256-4+2)/2+1
+
+>>>>one of the strengths of convolution neural networks is building the network using multiple layers
+
+convolution 2d network followed by a flatten 10@28x28 array
+
+
+>>>multi layer convolution network
+
+model= Sequential()
+
+model.add(Conv2D(10,kernel_size=2, activiation='relu',
+input_shape=(img_rows, img_cols, 1), padding='equal')))
+
+#because it receives its input from the first convolutional layer it does not need an input_shape parameter
+
+model.add(Conv2D(10,kernel_size=2,activation='relu'))
+
+model.add(Flatten())
+model.add(Dense(3,activation='softmax'))
+
+#a deep network of layers can respond to different features
+1. features in the early part of the layers can respond to edges or simple textures
+2. features in intermediate layers respond to more complex patterns
+3. features in the late layers tend to feature certain types of objects and helpful for object classification.  The cnn can identify distinct categories of objects.
+
+
+>>>sample
+
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten
+
+model = Sequential()
+
+# Add a convolutional layer (15 units)
+
+model.add(Conv2D(15, kernel_size=2, activation='relu', 
+                 input_shape=(img_rows, img_cols, 1)))
+
+# Add another convolutional layer (5 units)
+model.add(Conv2D(5,kernel_size=2,activation='relu'))
+# Flatten and feed to output layer
+model.add(Flatten())
+model.add(Dense(3, activation='softmax'))
+
+
+# Compile model
+model.compile(optimizer='adam', 
+              loss='categorical_crossentropy', 
+              metrics=['accuracy'])
+
+# Fit the model to training data 
+model.fit(train_data, train_labels, 
+          validation_split=0.2, 
+          epochs=3, batch_size=10)
+
+# Evaluate the model on test data
+model.evaluate(test_data, test_labels, batch_size=10)
+
+
+>>>How many parameters
+
+model=Sequential()
+
+model.add(Dense(10,activation='relu',input_shape=(784,)))
+model.add(Dense(10,activation='relu'))
+model.add(Dense(10, activation='softmax'))
+
+layer 1 parameters= 784*10 (10 units) + 10 (10 bias values)
+=7850
+
+layer 2 parameters = 10*10 + 10
+=110
+
+output layer = 10 *3 +3 
+=33
+
+7850+110+33=7993
+
+>>>Convolution network parameters
+
+model.add(Conv2D(15, kernel_size=3, activation='relu', 
+                 input_shape=(img_rows, img_cols, 1)))
+
+# Add another convolutional layer (5 units)
+model.add(Conv2D(10,kernel_size=3,activation='relu'))
+
+# Flatten and feed to output layer
+model.add(Flatten())
+model.add(Dense(3, activation='softmax')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

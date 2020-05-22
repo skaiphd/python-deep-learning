@@ -239,6 +239,371 @@ print(history.history['acc'])
 print(history.history['val_loss'])
 print(history.history['val_acc'])
 
+history, modelcheckpoint, earlystopping
+
+fit does callbacks
+
+#print(history.history['loss'])
+plt.figure()
+plt.plot(history.history['loss'])
+plt.xlabel('loss')
+plt.show()
+
+>>>>>Early stopping
+#useful because we don't know how many epochs will be required to complete training
+
+from keras.callbacks import EarlyStopping
+early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+
+#patience is the number of epochs to improve before the model is stopped
+
+
+model.fit(X_train, y_train, epochs=100,
+validation_data=(X_test,y_test),
+callbacks=[early_stopping])
+
+
+>>>model checkpoint
+
+from keras.callbacks import ModelCheckpoint
+
+#allows up to save the model as strings
+
+model_save=ModelCheckpoint('best_model.hdf5', save_best_only=True)
+
+model.fit(X_train, y_train, epochs=100,
+validation_data=(X_test,y_test),
+callbacks=[model_save])
+
+>>>
+
+# Train your model and save its history
+history = model.fit(X_train, y_train, epochs = 50,
+               validation_data=(X_test, y_test))
+
+# Plot train vs test loss during training
+plot_loss(history.history['loss'], history.history['val_loss'])
+
+# Plot train vs test accuracy during training
+plot_accuracy(history.history['acc'], history.history['val_acc'])
+
+# Import the early stopping callback
+from keras.callbacks import EarlyStopping
+
+# Define a callback to monitor val_acc
+monitor_val_acc = EarlyStopping(monitor='val_acc', 
+                       patience=5)
+
+# Train your model using the early stopping callback
+model.fit(X_train, y_train, 
+           epochs=1000, validation_data=(X_test,y_test),
+           callbacks=[monitor_val_acc])
+
+
+>>>
+
+# Import the EarlyStopping and ModelCheckpoint callbacks
+from keras.callbacks import EarlyStopping,ModelCheckpoint
+
+# Early stop on validation accuracy
+monitor_val_acc = EarlyStopping(monitor ='val_acc', patience=3)
+
+# Save the best model as best_banknote_model.hdf5
+modelCheckpoint = ModelCheckpoint('best_banknote_model.hdf5', save_best_only = True)
+
+# Fit your model for a stupid amount of epochs
+history = model.fit(X_train, y_train,
+                    epochs = 10000000,
+                    callbacks = [monitor_val_acc, modelCheckpoint],
+                    validation_data = (X_test, y_test))
+
+>>>Learning Curves
+
+1) loss learning curves decrease as epochs go by
+
+accuracy learning curves
+1) increase as epochs go by
+
+****model overfitting can be identified if the training curves and the validation curves diverge
+
+
+init_weights=model.get_weights()
+
+train_accs[]
+tests_accs[]
+
+for train_size in train_sizes:
+	X_train_frac, -, y_train_frac, = train_test_split(X_train,y_train,train_size=train_size)
+	model.set_weights(initial_weights)
+	model.fit(X_train_frac, y_train_frac, epochs=100, verbose=0,
+	callbacks[EarlyStopping(monitor='loss', patience=1)]
+	
+	train_acc=model.evalute(X_train_frac, y_train_frac, verbose=0)[1]
+	train_accs.append(train_acc)
+
+
+	test_acc=model.evalute(X_test_frac, y_test_frac, verbose=0)[1]
+	test_accs.append(train_acc)
+
+
+>>>
+
+# Instantiate a Sequential model
+model = Sequential()
+
+# Input and hidden layer with input_shape, 16 neurons, and relu 
+model.add(Dense(16, input_shape = (64,), activation = 'relu'))
+
+# Output layer with 10 neurons (one per digit) and softmax
+model.add(Dense(10, activation='softmax'))
+
+# Compile your model
+model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+
+# Test if your model works and can process input data
+print(model.predict(X_train))
+
+# Train your model for 60 epochs, using X_test and y_test as validation data
+history = model.fit(X_train, y_train, epochs=60, validation_data=(X_test, y_test), verbose=0)
+
+# Extract from the history object loss and val_loss to plot the learning curve
+plot_loss(history.history['loss'],history.history['val_loss'])
+
+for size in training_sizes:
+  	# Get a fraction of training data (we only care about the training data)
+    X_train_frac, y_train_frac = X_train[:size], y_train[:size]
+
+    # Reset the model to the initial weights and train it on the new data fraction
+    model.set_weights(initial_weights)
+    model.fit(X_train_frac, y_train_frac, epochs = 50, callbacks = [early_stop])
+
+    # Evaluate and store the train fraction and the complete test set results
+    train_accs.append(model.evaluate(X_train_frac, y_train_frac)[1])
+    test_accs.append(model.evaluate(X_test, y_test)[1])
+    
+# Plot train vs test accuracies
+plot_results(train_accs, test_accs)
+
+>>>>Activation Functions
+
+a=sum of inputs * weights + bias
+
+a is passed into an activation function producing y
+
+1. sigmoid varies between 0 and 1
+2. tanh varies between -1 and 1
+3. relu varies between 0 and infinity
+4. Leaky relu between negative value and infinity
+
+np.random.seed(1)
+
+def get_model(act_function):
+	model=Sequential()
+	model.add(Dense(4, input_shape=(2,), activation=act_function))
+	model.add(Dense(1, activation='sigmoid'))
+	return model
+
+
+activations=['relu','sigmoid','tanh','leaky_relu']
+
+for funct in activations:
+	model= get_model(act_function=funct)
+	history=model.fit(X_train, y_train,
+		validation_data=(X_test,y_test),
+		epochs=100,verbose=False)
+	activation_results[funct]=history
+
+val_loss_per_funct = {k:v.history['val_loss] for k,v in activation_results.items()}
+
+val_loss_curves.pd.DataFrame(val_loss_per_funct)
+
+val_loss_curves.plot(title='Loss per Activation function')
+
+
+>>>>
+
+# Activation functions to try
+activations = ['relu','leaky_relu','sigmoid','tanh']
+
+# Loop over the activation functions
+activation_results = {}
+
+for act in activations:
+  # Get a new model with the current activation
+  model = get_model(act)
+  # Fit the model
+  history = model.fit(X_train, y_train,
+		validation_data=(X_test,y_test),
+		epochs=20,verbose=0)
+  activation_results[act] = history
+
+# Create a dataframe from val_loss_per_function
+val_loss=  {k:v.history['val_loss'] for k,v in activation_results.items()}
+
+# Call plot on the dataframe
+val_loss_per_function=pd.DataFrame(val_loss)
+val_loss_per_function.plot()
+plt.show()
+
+# Create a dataframe from val_acc_per_function
+val_acc =  {k:v.history['val_acc'] for k,v in activation_results.items()}
+
+# Call plot on the dataframe
+val_acc_per_function=pd.DataFrame(val_acc)
+val_acc_per_function.plot()
+plt.show()
+
+>>>>batch size and batch normalization
+
+1. mini-batches advantages
+a. networks train faster (more weight updates in same amount of time)
+b. less RAM memory required, can train on huge datasets
+c. noise can help networks reach a lower error, escaping local minima
+
+2. mini-batches disadvantages
+a. more iterations need to be run
+b. need to be adjusted, we need to find a good batch size
+
+keras uses a batch size of 32
+
+The smaller a batch size, the more weight updates per epoch, but at a cost of a more unstable gradient descent. Specially if the batch size is too small and it's not 
+
+standardization 
+data-mean/standard deviation
+
+batch normalization makes sure that independently of the changes, the inputs to the next layer are normalized
+
+batch normalization advantages
+1. improves gradient flow
+2. allows higher learning rates
+3. reduces dependence on weight initializations
+4. acts as an unintended form of regularization
+5. limits internal covariate shift
+
+from keras.layers import BatchNormalization
+
+model=Sequential()
+model.add(Dense(3, input_shape=(2,), activation='relu'))
+model.add(BatchNormalization())
+model.add(Dense(1,activation='sigmoid')
+
+>>
+
+model = get_model()
+
+# Fit your model for 5 epochs with a batch of size the training set
+model.fit(X_train, y_train, epochs=5, batch_size=len(X_train))
+print("\n The accuracy when using the whole training set as a batch was: ",
+      model.evaluate(X_test, y_test)[1])
+
+>>>
+
+# Import batch normalization from keras layers
+from keras.layers import BatchNormalization
+
+# Build your deep network
+batchnorm_model = Sequential()
+batchnorm_model.add(Dense(50, input_shape=(64,), activation='relu', kernel_initializer='normal'))
+batchnorm_model.add(BatchNormalization())
+batchnorm_model.add(Dense(50, activation='relu', kernel_initializer='normal'))
+batchnorm_model.add(BatchNormalization())
+batchnorm_model.add(Dense(50, activation='relu', kernel_initializer='normal'))
+batchnorm_model.add(BatchNormalization())
+batchnorm_model.add(Dense(10, activation='softmax', kernel_initializer='normal'))
+
+# Compile your model with sgd
+batchnorm_model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])
+
+
+# Train your standard model, storing its history
+history1 = standard_model.fit(X_train, y_train, validation_data=(X_test,y_test), epochs=10, verbose=0)
+
+# Train the batch normalized model you recently built, store its history
+history2 = batchnorm_model.fit(X_test, y_test, validation_data=(X_test,y_test), epochs=10, verbose=0)
+
+# Call compare_acc_histories passing in both model histories
+compare_histories_acc(history1, history2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

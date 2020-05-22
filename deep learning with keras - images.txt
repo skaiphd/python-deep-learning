@@ -1,0 +1,118 @@
+# Import matplotlib
+import matplotlib.pyplot as plt
+
+# Load the image
+data = plt.imread('bricks.png')
+
+# Display the image
+plt.imshow(data)
+plt.show()
+
+
+# Set the red channel in this part of the image to 1
+data[:10, :10, 0] = 1
+
+# Set the green channel in this part of the image to 0
+data[:10, :10, 1] = 0
+
+# Set the blue channel in this part of the image to 0
+data[:10, :10, 2] = 0
+
+# Visualize the result
+plt.imshow(data)
+plt.show()
+
+Image classification: training
+
+learn patterns in the data
+
+representing class data : one hot encoding
+
+labels=['shoe','dress','shoe','t-shirt','shoe','t-shirt','shoe','dress']
+
+categories = np.array(['t-shirt','dress','shoe'])
+
+n_categories=3
+
+ohe_labels=np.zeros((len(labels),n_categories))
+
+for ii in range(len(labels)):
+	jj=np.where(categories==labels[ii])
+
+
+# Calculate the number of correct predictions
+number_correct = (test_labels * predictions).sum()
+print(number_correct)
+
+# Calculate the proportion of correct predictions
+proportion_correct = number_correct/len(predictions)
+print(proportion_correct)
+
+
+>>>Using Keras for image classification
+
+from keras.models import Sequential
+from keras.layers import Dense
+
+model=Sequential()
+
+#28x28 pixels 1 greyscale 
+
+print(X_train.shape)
+
+#28x28 pixels=784 pixels
+model.add(Dense(10, activation='relu', input_shape=(784,)))
+
+model.add(Dense(10,activation='relu'))
+
+model.add(Dense(3,activation='softmax'))
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+model.summary()
+
+train_data=train_data.reshape((50,784))
+
+model.fit(train_data, train_labels,
+	validation_split=0.2,
+	epochs=3)
+
+
+>>>Sample
+
+# Imports components from Keras
+from keras.models import Sequential
+from keras.layers import Dense
+
+# Initializes a sequential model
+model = Sequential()
+
+# First layer
+model.add(Dense(10, activation='relu', input_shape=(784,)))
+
+# Second layer
+model.add(Dense(10, activation='relu'))
+
+# Output layer
+model.add(Dense(3,activation='softmax'))
+
+model.compile(optimizer='adam', 
+           loss='categorical_crossentropy', 
+           metrics=['accuracy'])
+
+train_data=train_data.reshape((50,784))
+
+# Fit the model
+model.fit(train_data, train_labels, validation_split=0.2, epochs=3)
+
+# Reshape test data
+test_data = test_data.reshape(10, 784)
+
+# Evaluate the model
+model.evaluate(test_data, test_labels)
+
+
+
+
+
+

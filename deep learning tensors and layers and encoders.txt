@@ -1,0 +1,135 @@
+first_layers = model.layers[0]
+
+print(first_layer.input)
+print(first_layer.ouput)
+print(first_layer.weights)
+
+
+tensors are 2 dimensions
+
+T2=[[1,2,3],
+[4,5,6],
+[7,8,9]]
+
+A three dimension tensors is an array of matrices.
+
+
+import keras.backend as K
+
+inp= model.layers[0].input
+out= model.layers[0].output
+
+inp_to_out = K.function([inp],[out])
+
+print(inp_to_out([X_train]))
+
+autoencoders are models have the same inputs as outputs
+1) dimensionality reduction
+a. smaller dimensional space representation of our inputs
+2) De-noising data
+a. if trained with clean data, irrelevant noise will be filtered out during reconstruction.
+3. Anomaly detection:
+a. a poor reconstruction will result when the model is fed with unseen inputs
+
+
+autoencoder= Sequential()
+
+autoencoder.add(Dense(4, input_shape(100,), activation='relu'))
+
+autoencoder.add(Dense(100,activation='sigmoid')
+
+autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+
+
+encoder=Sequential()
+encoder.add(autoencoder.layers[0])
+
+encoder.predict(X_test)
+
+
+>>>>
+# Import keras backend
+import keras.backend as K
+
+# Input tensor from the 1st layer of the model
+inp =  model.layers[0].input
+
+# Output tensor from the 1st layer of the model
+out = model.layers[0].output
+
+# Define a function from inputs to outputs
+inp_to_out = K.function([inp], [out])
+
+# Print the results of passing X_test through the 1st layer
+print(inp_to_out([X_test]))
+
+for i in range(0, 21):
+  	# Train model for 1 epoch
+    h = model.fit(X_train, y_train, batch_size=16, epochs=1, verbose=0)
+    if i%4==0: 
+      # Get the output of the first layer
+      layer_output = inp_to_out([X_test])[0]
+      
+      # Evaluate model accuracy for this epoch
+      test_accuracy = model.evaluate(X_test, y_test)[1] 
+      
+      # Plot 1st vs 2nd neuron output
+      plot()
+
+# Start with a sequential model
+autoencoder = Sequential()
+
+# Add a dense layer with the original image as input
+autoencoder.add(Dense(32, input_shape=(784, ), activation="relu"))
+
+# Add an output layer with as many nodes as the image
+autoencoder.add(Dense(784, activation="sigmoid"))
+
+# Compile your model
+autoencoder.compile(optimizer="adadelta", loss="binary_crossentropy")
+
+# Take a look at your model structure
+autoencoder.summary()
+
+
+# Build your encoder
+encoder = Sequential()
+encoder.add(autoencoder.layers[0])
+
+# Encode the images and show the encodings
+preds = encoder.predict(X_test_noise)
+show_encodings(preds)
+
+# Build your encoder
+encoder = Sequential()
+encoder.add(autoencoder.layers[0])
+
+# Encode the images and show the encodings
+preds = encoder.predict(X_test_noise)
+show_encodings(preds)
+
+# Predict on the noisy images with your autoencoder
+decoded_imgs = autoencoder.predict(X_test_noise)
+
+# Plot noisy vs decoded images
+compare_plot(X_test_noise, decoded_imgs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

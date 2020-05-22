@@ -1,0 +1,155 @@
+>> Neural network hyperparameters
+
+1. number of layers
+2. number of neurons per layer
+3. layer order
+4. layer activations
+5. batch sizes
+6. learning rates
+7. optimizers
+
+
+from sklearn.model_selection import RandomizedSearchCV
+
+tree=DecisionTreeClassifier()
+
+params={'max_depth':[3,None],'max_features':range(1,4),'min_samples_leaf':range(1,4)}
+
+tree_cv=RandomizedSearchCV(tree,params,cv=5)
+
+print(tree_cv.best_params_)
+
+
+>>>>Turn a Keras model into a sklearn Estimate
+
+def create_model(optimizer='adam', activation='relu'):
+	model=Sequential()
+	model.add(Dense(16,input_shape=(2,), activation=activation))
+	model.add(Dense(1, activation='sigmoid'))
+	model.compile(optimizer=optimizer, loss='binary_crossentropy')
+	return model
+
+
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
+
+model= KerasClassifier(build_fn=create_model, epochs=6, batch_size=16)
+
+kfold=cross_val_score(model, X, y, cv=5)
+
+kfold.mean()
+kfold.std()
+
+#grid search looks over all combinations of parameters
+
+1. Random search is preferred over grid search
+2. Don't use many epochs
+3. Use a smaller sample of your dataset
+4. play with batch sizes, activations, optimizers and learning rates
+
+params = dict(optimizer=['sgd','adam'],epochs=3,
+batch_size=[5,10,20], activation=['relu','tanh'])
+
+random_search=RandomizedSearchCV(model,params_dist=params,cv=3)
+
+random_search_results= random_search.fit(X,y)
+
+print("Best: %f using %s".format(random_search_results.best_score_,
+random_search_results.best_params_))
+
+def create_model(n1=1, nn=256):
+	model=Sequential()
+	model.add(Dense(16,input_shape(2,), activation='relu'))
+
+for i in range(n1):
+	model.add(Dense(nn,activation='relu'))
+
+
+params=dict(n1=[1,2,9], nn=[128,256,1000])
+
+random_search=RandomizedSearchCV(model,params_dist=params,cv=3)
+
+random_search_results= random_search.fit(X,y)
+
+print("Best: %f using %s".format(random_search_results.best_score_,
+random_search_results.best_params_))
+
+
+>>>>
+
+# Creates a model given an activation and learning rate
+def create_model(learning_rate=0.01, activation='relu'):
+  
+  	# Create an Adam optimizer with the given learning rate
+  	opt = Adam(lr=learning_rate)
+  	
+  	# Create your binary classification model  
+  	model = Sequential()
+  	model.add(Dense(128, input_shape=(30,), activation=activation))
+  	model.add(Dense(256, activation=activation))
+  	model.add(Dense(1, activation='sigmoid'))
+  	
+  	# Compile your model with your optimizer, loss, and metrics
+  	model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
+  	return model
+
+
+# Creates a model given an activation and learning rate
+def create_model(learning_rate=0.01, activation='relu'):
+  
+  	# Create an Adam optimizer with the given learning rate
+  	opt = Adam(lr=learning_rate)
+  	
+  	# Create your binary classification model  
+  	model = Sequential()
+  	model.add(Dense(128, input_shape=(30,), activation=activation))
+  	model.add(Dense(256, activation=activation))
+  	model.add(Dense(1, activation='sigmoid'))
+  	
+  	# Compile your model with your optimizer, loss, and metrics
+  	model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
+  	return model
+
+
+# Import KerasClassifier from keras wrappers
+from keras.wrappers.scikit_learn import KerasClassifier
+
+# Create a KerasClassifier
+model = KerasClassifier(build_fn = create_model)
+
+# Define the parameters to try out
+params = {'activation':['relu', 'tanh'], 'batch_size':[32, 128, 256], 
+          'epochs':[50, 100, 200], 'learning_rate':[0.1, 0.01, .001]}
+
+# Create a randomize search cv object passing in the parameters to try
+random_search = RandomizedSearchCV(model, param_distributions = params, cv = KFold(3))
+
+
+# Import KerasClassifier from keras wrappers
+from keras.wrappers.scikit_learn import KerasClassifier
+
+# Create a KerasClassifier
+model = KerasClassifier(build_fn = create_model, epochs = 50, 
+             batch_size = 128, verbose = 0)
+
+# Calculate the accuracy score for each fold
+kfolds = cross_val_score(model, X, y, cv = 5)
+
+# Print the mean accuracy
+print('The mean accuracy was:', kfolds.mean())
+
+# Print the accuracy standard deviation
+print('With a standard deviation of:', kfolds.std())
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,111 @@
+lstms are a type of reocurring neural network
+
+the output of an lstm can be fed back into the hidden layer of a neural network.
+
+lstm can use past predictions to make new predictions
+
+1. internal state of previous unit
+2. output of previous unit
+3. input at time f
+4. input to next LSTM unit
+5. updated state for next unit
+6. output of LSTM unit
+
+lstm learn what to ignore, what to keep, and to select the most important pieces of past information.
+
+lstm have been used for image captioning, speech to text, text translation, and document summarization and text generation.
+
+this is a sentence
+
+42 11 23 1
+
+text='Hi this is a small sentence'
+
+seq_len=3
+
+words=text.split()
+
+lines=[]
+
+for i in range(seq_len, len(words)+1):
+	line= ' '.join(words[i-seq_len:i])
+	lines.append(line)
+
+from keras.preprocessing.text import Tokenizer
+
+tokenizer=Tokenizer()
+
+tokenizer.fit_on_texts(lines)
+
+seqences=tokenizer.texts_to_sequences(lines)
+
+print(tokenizer.index_word)
+
+from keras.layers import Dense, LSTM, Embedding
+
+model=Sequential()
+
+#length of the tokenizer dictionary plus 1
+
+vocab_size= len(tokenizer.index_word)+1
+
+model.add(Embedding(input_dim=vocab_size, output_dim=8, input_length=2))
+
+model.add(LSTM(8))
+
+model.add(Dense(8, activation='relu'))
+
+model.add(Dense(vocab_size, activation='softmax'))
+
+>>>>
+
+# Import the Embedding, LSTM and Dense layer
+from keras.layers import LSTM, Embedding, Dense
+
+model = Sequential()
+
+# Add an Embedding layer with the right parameters
+model.add(Embedding(input_dim=vocab_size, output_dim=8, input_length=3))
+
+
+
+# Add a 32 unit LSTM layer
+model.add(LSTM(32))
+
+# Add a hidden Dense layer of 32 units and an output layer of vocab_size with softmax
+model.add(Dense(32, activation='relu'))
+model.add(Dense(vocab_size, activation='softmax'))
+model.summary()
+
+def predict_text(test_text):
+  if len(test_text.split())!=3:
+    print('Text input should be 3 words!')
+    return False
+  
+  # Turn the test_text into a sequence of numbers
+  test_seq = tokenizer.texts_to_sequences([test_text])
+  test_seq = np.array(test_seq)
+  
+  # Get the model's next word prediction by passing in test_seq
+  pred = model.predict(test_seq).argmax(axis = 1)[0]
+  
+  # Return the word associated to the predicted index
+  return tokenizer.index_word[pred]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
