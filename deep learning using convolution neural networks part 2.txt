@@ -1,3 +1,4 @@
+
 >>>Convolutions
 
 using correlations in images
@@ -249,7 +250,7 @@ output layer = 10 *3 +3
 
 >>>Convolution network parameters
 
-model.add(Conv2D(15, kernel_size=3, activation='relu', 
+model.add(Conv2D(10, kernel_size=3, activation='relu', 
                  input_shape=(img_rows, img_cols, 1)))
 
 # Add another convolutional layer (5 units)
@@ -258,6 +259,293 @@ model.add(Conv2D(10,kernel_size=3,activation='relu'))
 # Flatten and feed to output layer
 model.add(Flatten())
 model.add(Dense(3, activation='softmax')
+
+9*`10+10=100
+#1st layer
+
+10*9*10+10=910
+#2nd layer
+
+7840*3+3=23523
+#output layer
+
+>>>>sample
+
+9*10_10=100
+
+10*9*10+10=910
+
+7840*2+2=15682
+
+>>>parameter pooling
+
+1. retains the brightest pixel in the 2x2 matrix
+2. reduces the size the image
+
+result=np.zeros((im.shape[0]//2, im.shape[1]//2))
+result[0,0]=np.max(im(0:2,0:2])
+#slide along the window in two pixels
+result[0,1]=np.max(im[0:2,2:4])
+
+#move to the 2nd row
+result[1,0]=np.max(im[2:4,0:2])
+result[1,1]=np.max(im[2:4,2:4])
+
+
+>>implement with a loop
+
+for ii in range(result.shape[0]):
+	for jj in rane(result.shape[1]):
+	result[ii,jj]=np.max(im[ii*2:ii*2+2, jj*2:jj*2+2])
+
+>>Max pooling in Keras
+
+1. convolution neural networks are very expressive output
+hence the high number of neurons in the last layers
+
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten, MaxPool2D
+
+model=Sequential()
+
+mode.add(Conv2D(5,kernel_size=3, activation='relu',
+input_shape(img_rows,img_cols,1))
+
+model.add(MaxPool2D(2))
+
+model.add(Con2D(15, kernel_size=3, activation='relu',
+input_shape=(img_rows,img_cols,1)))
+
+model.add(Flatten())
+model.add(Dense(3, activation='softmax'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics = ['accuracy'])
+
+>>Pooling affect
+1. Pool dramatically reduces the number of parameters in the model
+
+
+>>Sample
+
+# Add a convolutional layer
+model.add(Conv2D(15, kernel_size=2, activation='relu', 
+                 input_shape=(img_rows, img_cols, 1)))
+
+# Add a pooling operation
+model.add(MaxPool2D(2))
+
+# Add another convolutional layer
+model.add(Con2D(5, kernel_size=3, activation='relu',
+input_shape=(img_rows,img_cols,1)))
+
+# Flatten and feed to output layer
+model.add(Flatten())
+
+model.add(Dense(3, activation='softmax'))
+model.summary()
+
+# Compile the model
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics = ['accuracy'])
+
+# Fit to training data
+model.fit(train_data,train_labels, epochs=3,batch_size=10)
+
+# Evaluate on test data 
+model.evaluate(test_data,test_labels)
+
+>>>Track learning
+1. if validation flattens out and loss continues to drop then you have a form of overfit
+
+import matplotlib.pyplot as plt
+
+training=model.fit(train_data, train_labels,
+epochs=3, validation_split=0.2)
+
+plt.plot(training.history['loss'])
+plt.plot(training.history['val_loss'])
+
+>>>Checkpoint
+
+1. Store the weights after the end of each epoch learning
+
+from keras.callbacks import ModelCheckpoint
+
+checkpoint= ModelCheckpoint('weights.hdf5', monitor='val_loss', save_best_only=True)
+
+callbacks_list= [checkpoint]
+
+model.fit(train_data, train_labels, validation_split=0.2,
+epochs=3, callbacks=callbacks_list)
+
+model.load_weights('weighthdf5')
+
+model.predict_classes(test_data)
+
+>>>Regularization
+
+1. Regularization helps prevent overfitting
+2. Dropout
+a. select a random subset of units and ignore it
+b. ignore it in the forward pass
+c. and in back-progation of error
+
+it works because we can train many different networks on different parts of the data.
+
+Randomly chosen from different parts of the network and prevents different parts of the network from becoming to correlated.
+
+
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten, Dropout
+
+model=Sequential()
+model.add(Conv2D(5, kernel_size=3, activation='relu',
+input_shape=(img_rows,img_cols,1)))
+
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+#what portion to ignore.
+
+>>>batch normalization
+1. rescales the output to 0 mean and standard deviation of 1
+2. solves the problem where different inputs might have wildly different distributions of data.
+
+model.add(BatchNormalization())
+
+there can be disharmony between dropout and batch normalization.
+
+>>Interpreting the model
+
+1. understanding why the model works well
+2. efforts are being made to understand the interpreting the model
+
+model.layers
+
+conv1=model.layers[0]
+weights1 = conv1.get_weights()
+len(weights1)
+
+kernels1= weights1[0]
+kernels1.shape
+(3,3,1,5)
+
+3x3 kernel with 1 channel total for 5 kernels
+
+kernel1_1 = kernels1[:,:,0,0]
+kernel1_1.shape
+
+(3,3)
+
+plt.imshow(kernel1_1)
+
+test_image= test_data[3,:,:,0]
+
+#retrieve the fourth image
+plt.imshow(test_image)
+
+filtered_image= convolution(test_image, kernel1_1)
+
+plt.imshow(filtered_image)
+
+kernel1_2=kernels[:,:,0,1]
+
+filter_image=convolution(test_image, kernel1_2)
+plt.imshow(filtered_img)
+
+>>Sample
+
+# Load the weights into the model
+model.load_weights('weights.hdf5')
+
+# Get the first convolutional layer from the model
+c1 = model.layers[0]
+
+# Get the weights of the first convolutional layer
+weights1 = c1.get_weights()
+
+# Pull out the first channel of the first kernel in the first layer
+kernel = weights1[0][...,0, 0]
+print(kernel)
+
+
+import matplotlib.pyplot as plt
+
+# Convolve with the fourth image in test_data
+out = convolution(test_data[3, :, :, 0], kernel)
+
+# Visualize the result
+plt.imshow(out)
+plt.show()
+
+
+>>>>
+
+residual networks
+transfer learning
+fully convolution networks
+generative adversarial networks
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
