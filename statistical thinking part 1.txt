@@ -410,6 +410,396 @@ _ = plt.ylabel('probability')
 # Show the plot
 plt.show()
 
+def ecdf(data):
+    """Compute ECDF for a one-dimensional array of measurements."""
+    # Number of data points: n
+    n =len(data)
+
+    # x-data for the ECDF: x
+    x = np.sort(data)
+
+    # y-data for the ECDF: y
+    y = np.arange(1,n+1) / n
+
+    return x, y
+
+# Compute ECDF: x, y
+
+x,y=ecdf(n_defaults)
+# Plot the ECDF with labeled axes
+
+_=plt.plot(x,y,marker='.', linestyle='none')
+_=plt.xlabel('Bank Defaults')
+_=plt.ylabel('ECDF')
+
+
+# Show the plot
+
+plt.show()
+
+# Compute the number of 100-loan simulations with 10 or more defaults: n_lose_money
+
+n_lose_money = np.sum(n_defaults >= 10)
+
+# Compute and print probability of losing money
+print('Probability of losing money =', n_lose_money / len(n_defaults))
+
+
+>>>>The binomial distribution
+
+
+Probability mass function (PMF)
+1. The set of probabilities of discrete outcomes
+2.  the values are discrete because only certain values can be obtained.
+
+dice: 1,2,3,4,5,6 each with a 1/6 probability
+1. discrete uniform probablity pmf
+
+probability distribution is a mathematical descriptiion of outcomes.
+
+The binomial distribution story
+
+The number r of successes in n bernouli trials with probability p of sucess is binomially distributed.
+
+The number r of heads in 4 flips with probability 0.5 of heads is binomially distributed.
+
+print(np.random.binomial(100,0.5,size=10))
+#size  tells the function how many random numbers to sample out the distribution
+
+n=60
+p=0.1
+samples=np.random.binomial(n,p,size=10000)
+
+x,y = ecdf(samples)
+_ = plt.plot(x,y, marker='.', linestyle='none')
+plt.margins(0.02)
+_ = plt.xlabel('number of successes')
+_ = plt.ylabel('CDF')
+plt.show()
+
+
+>>>Sample
+
+n=100
+p=0.05
+n_defaults=np.random.binomial(n,p,size=10000)
+
+# Compute CDF: x, y
+x,y = ecdf(n_defaults)
+
+_ = plt.plot(x,y, marker='.', linestyle='none')
+plt.margins(0.02)
+_ = plt.xlabel('number of successes')
+_ = plt.ylabel('CDF')
+plt.show()
+
+# Compute bin edges: bins
+bins = np.arange(0, max(n_defaults) + 1.5) - 0.5
+
+# Generate histogram
+plt.clf()
+_ = plt.hist(n_defaults, bins=bins, normed=True)
+_ = plt.xlabel('number of defaults out of 100 loans')
+_ = plt.ylabel('probability')
+_
+# Label axes
+
+
+# Show the plot
+plt.show()
+
+
+>>>>Poisson Process
+
+1.  The time of the next event is completely independent of when the prevous event happened
+a. natural births in a given hospital
+b. hit on a website during a given hour
+c. meteor strikes
+d. molecular collision in a gas
+e. avaition incidents
+f. buses in poissonville
+
+poisson distribution
+
+1. The number r of arrivals of a poisson process in a given time interval with a average rate of ? arrivals per interval is poisson distribution
+
+2. The number r of hits on a website in one hour with an average hit rate of 6 hits per hour is poisson distribute
+
+Poisson distribution
+1. limit of binomial distribution of low probablity of success and large number of trials
+2. That is, for rare events
+
+https://www.cnbc.com/2020/02/07/junk-bond-scare-is-rising-no-one-cares-people-are-buying-everything.html
+
+https://www.cnbc.com/2020/04/06/investing-in-hunt-for-returns-investors-are-buying-junk-bonds.html
+
+samples = np.random.poisson(6, size=10000)
+x,y=ecdf(samples)
+_=plt.plot(x,y, marker='.', linestyle='none')
+plt.margins(0.02)
+_= plt.xlabel('number of successes')
+_= plt.ylabel('cdf')
+plt.show()
+
+>>sample
+
+#the Poisson distribution is a limit of the Binomial distribution for rare events
+
+#Say we do a Bernoulli trial every minute for an hour, each with a success probability of 0.1. We would do 60 trials, and the number of successes is Binomially distributed, and we would expect to get about 6 successes. 
+
+
+>>>Sample 1
+
+# Draw 10,000 samples out of Poisson distribution: samples_poisson
+
+samples_poisson = np.random.poisson(10, size=10000)
+
+# Print the mean and standard deviation
+print('Poisson:     ', np.mean(samples_poisson),
+                       np.std(samples_poisson))
+
+# Specify values of n and p to consider for Binomial: n, p
+
+n=[20,100,1000]
+p=[0.5,0.1,0.01]
+
+# Draw 10,000 samples for each n,p pair: samples_binomial
+for i in range(3):
+    samples_binomial = np.random.binomial(n[i],p[i],size=10000)
+
+    # Print results
+    print('n =', n[i], 'Binom:', np.mean(samples_binomial),
+                                 np.std(samples_binomial))
+
+>>Sample 2
+
+# Draw 10,000 samples out of Poisson distribution: n_nohitters
+
+n_nohitters = np.random.poisson(251/115, size=10000)
+
+# Compute number of samples that are seven or greater: n_large
+n_large = np.sum(n_nohitters>=7)
+
+# Compute probability of getting seven or more: p_large
+
+p_large=n_large/10000
+
+# Print the result
+print('Probability of seven or more no-hitters:', p_large)
+
+
+>>>density functions
+
+continous variables can take on any values, not just discrete values.
+
+normal distribution
+
+1. probability density function (pdf)
+a. continous analog to the pmf
+b. mathematical description of the relative likelihood of observing a value of a continous variable
+
+cdf - accumulative distribution function
+
+Normal distribution is famous
+1. describes a continous variable whose PDF has a single symmetric peak.
+a. The mean determines where the center of the peak is
+b. The standard deviation is a measure of how wide the peak is.
+
+
+we can use a histogram to compare the data to a normal probability of distribution pdf
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+mean=np.mean(michelson_speed_of_light)
+std= np.std(michelson_speed_of_light)
+
+samples= np.random.normal(mean,std, size=10000)
+x,y=ecdf(michaelson_speed_of_light)
+x_theory,y_theory=ecdf(samples)
+
+sns.set()
+
+_=plt.plot(x_theory,y_theory)
+_=plt.plot(x,y,marker='.', linestyle='none')
+_=plt.xlabel('speed of light (km/s)')
+_=plt.ylabel('cdf')
+plt.show()
+
+The michelson data is approximately normally distributed
+
+>>Sample of the distribution
+
+# Draw 100000 samples from Normal distribution with stds of interest: samples_std1, samples_std3, samples_std10
+samples_std1 = np.random.normal(20, 1, size=100000)
+samples_std3 = np.random.normal(20, 3, size=100000)
+samples_std10 = np.random.normal(20, 10, size=100000)
+
+# Make histograms
+_ = plt.hist(samples_std1, bins=100, normed=True, histtype='step')
+_ = plt.hist(samples_std3, bins=100, normed=True, histtype='step')
+_ = plt.hist(samples_std10, bins=100, normed=True, histtype='step')
+
+# Make a legend, set limits and show plot
+_ = plt.legend(('std = 1', 'std = 3', 'std = 10'))
+plt.ylim(-0.01, 0.42)
+plt.show()
+
+# Generate CDFs
+x_std1,y_std1=ecdf(samples_std1)
+x_std3,y_std3=ecdf(samples_std3)
+x_std10,y_std10=ecdf(samples_std10)
+
+
+
+# Plot CDFs
+
+_=plt.plot(x_std1,y_std1)
+_=plt.plot(x_std3,y_std3)
+_=plt.plot(x_std10,y_std10)
+
+
+# Make a legend and show the plot
+_ = plt.legend(('std = 1', 'std = 3', 'std = 10'), loc='lower right')
+plt.show()
+
+>>>Normal distribution and properties and warnings
+1. The normal distribution is often referred to as the guassian distribution
+
+>>sample 3
+# Compute mean and standard deviation: mu, sigma
+mu = np.mean(belmont_no_outliers)
+sigma = np.std(belmont_no_outliers)
+
+# Sample out of a normal distribution with this mu and sigma: samples
+samples = np.random.normal(mu, sigma, size=10000)
+
+# Get the CDF of the samples and of the data
+x_theor, y_theor = ecdf(samples)
+x, y = ecdf(belmont_no_outliers)
+
+# Plot the CDFs and show the plot
+_ = plt.plot(x_theor, y_theor)
+_ = plt.plot(x, y, marker='.', linestyle='none')
+_ = plt.xlabel('Belmont winning time (sec.)')
+_ = plt.ylabel('CDF')
+plt.show()
+
+# Take a million samples out of the Normal distribution: samples
+samples = np.random.normal(mu, sigma, size=1000000)
+
+# Compute the fraction that are faster than 144 seconds: prob
+prob = np.sum(samples <= 144) / len(samples)
+
+# Print the result
+print('Probability of besting Secretariat:', prob)
+
+https://www.cnbc.com/2020/03/20/junk-bond-default-rate-expected-to-triple-in-next-12-months-sp-says.html
+
+S&P Global Ratings said the default rate for high-yield, or junk, bonds is heading to 10% over the next 12 months, more than triple the rate of 3.1% that closed out 2019. 
+
+find junk bonds by cuspip
+https://managingfundswithpythonandsql.wordpress.com/
+
+:/Index Holdings/High Yield Archiv
+
+https://github.com/fedspendingtransparency/usaspending-website/wiki
+
+>>>>Exponential distribution
+
+1. The waiting time between arrivals of a poisson process is exponentially distributed
+
+2. It has a single parameter the mean waiting time
+
+nuclear incidents - timing of one is independent of all others. time of days between nuclear incidents
+
+mean= np.mean(inter_times)
+samples = np.random.exponential(mean, size=10000)
+x,y=ecdf(inter_times)
+x_theor,y_theor = ecdf(samples)
+
+_ = plt.plot(x_theor, y_theor)
+_ = plt.plot(x, y, marker='.', linestyle='none')
+_ = plt.xlabel('time (days)')
+_ = plt.ylabel('CDF')
+
+
+
+speculative grade default rates
+
+https://www.schwab.com/resource-center/insights/content/corporate-defaults-what-investors-should-know-when-a-bond-issuer-goes-bankrupt
+
+1984 3%
+1988 3%
+1992 12%
+1996 4%
+2000 8%
+2002 12%
+2004 6%
+2008 2%
+2010 12%
+2012 3%
+2016 5%
+2020 2%
+
+if the incidents are evenly distributed the event can be modeled as a poisson process.
+
+if you can simulate a story you can get its distribution.
+
+
+>>sample
+
+def successive_poisson(tau1, tau2, size=1):
+    """Compute time for arrival of 2 successive Poisson processes."""
+    # Draw samples out of first exponential distribution: t1
+    t1 = np.random.exponential(tau1, size)
+
+    # Draw samples out of second exponential distribution: t2
+    t2 = np.random.exponential(tau2, size)
+
+    return t1 + t2
+
+
+#Recall, from the earlier exercise, that tau1 denotes the mean waiting time for a no-hitter, while tau2 denotes the mean waiting time for hitting the cycle.
+
+#The mean waiting time for a no-hitter is 764 games, and the mean waiting time for hitting the cycle is 715 games.
+
+
+waiting_times = successive_poisson(764, 715, size=100000)
+
+# Make the histogram
+_ = plt.hist(waiting_times, bins=100, histtype='step',
+             normed=True)
+
+# Label axes
+_ = plt.xlabel('total waiting time (games)')
+_ = plt.ylabel('PDF')
+
+# Show the plot
+plt.show()
+
+# Notice that the PDF is peaked, unlike the waiting time for a single Poisson process. For fun (and enlightenment), I encourage you to also plot the CDF.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
