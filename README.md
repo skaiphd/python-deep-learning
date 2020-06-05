@@ -3,6 +3,8 @@ python deep learning notebooks
 
 I am using python to visualize data and learn from it.
 
+* I modeled binomal and poisson distributions in python
+* I modeled the trigometric function 5 times sin 1.5 times x plus pi divided 4
 * I built a convolution neural net to learn an apple, banana, and orange image (deep learning - cnn - recognizing a list of images) 
 * I built a deep learning stocastic descent model to learn a trigonomy function (r=1-sin theta)
 * I built a deep learning linear classifier to identify cultivator (deep learning intro with keras - linear classification.ipynb)
