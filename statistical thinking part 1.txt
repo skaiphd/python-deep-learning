@@ -744,6 +744,7 @@ https://www.schwab.com/resource-center/insights/content/corporate-defaults-what-
 2016 5%
 2020 2%
 
+
 if the incidents are evenly distributed the event can be modeled as a poisson process.
 
 if you can simulate a story you can get its distribution.
