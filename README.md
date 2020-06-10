@@ -3,6 +3,7 @@ python deep learning notebooks
 
 I am using python to visualize data and learn from it.
 
+* I feature analyze and extract using K-means cluster on the Iris classifier using K-means cluster
 * I modeled the statistical distribution of the Junk bond market and determine it is not a normal distribution
 * I modeled binomal and poisson distributions in python
 * I modeled the trigometric function 5 times sin 1.5 times x plus pi divided 4
