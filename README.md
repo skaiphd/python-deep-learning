@@ -3,6 +3,7 @@ python deep learning notebooks
 
 I am using python to visualize data and learn from it.
 
+* I added Michelson vs Newcomb speed of light hypothesis testing code
 * I feature analyze and extract using K-means cluster on the Iris classifier using K-means cluster
 * I modeled the statistical distribution of the Junk bond market and determine it is not a normal distribution
 * I modeled binomal and poisson distributions in python
