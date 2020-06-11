@@ -278,6 +278,7 @@ def draw_bs_reps(data, func, size=1):
 >>Sample
 
 # Take 10,000 bootstrap replicates of the mean: bs_replicates
+
 bs_replicates = draw_bs_reps(rainfall, np.mean, size=10000)
 
 # Compute and print SEM
@@ -594,6 +595,96 @@ p-value=0.0063
 
 
 The p-value tells you that there is about a 0.6% chance that you would get the difference of means observed in the experiment if frogs were exactly the same. A p-value below 0.01 is typically said to be "statistically significant," but: warning! warning! warning! You have computed a p-value; it is a number. I encourage you not to distill it to a yes-or-no phrase. p = 0.006 and p = 0.000000006 are both said to be "statistically significant," but they are definitely not the same!
+
+
+pipleline for hypothesis testing
+
+1. clearly state the null hypothesis
+2. define your testing statistic
+3. generate many sets of simulated data assuming the null hypothesis is true
+4. Compute the test statistic for each simulated data set
+5. The p-value is the fraction of your simulated data set for which the test statistic is at least as extreme as for the real data.
+
+
+we want to know if there is something michelson speed of light 299,852 km/s and newcomb 299,860 km/s are correlated
+
+we only have th newcomb mean
+
+Null hypothesis
+
+1. The true mean speed of light in Michelsons experiments was actually Newcombs reported value.
+
+>>>How using bootstrapping to simulate data under the null hypothesis
+
+1. we shift michelsons data with the same mean as newcombs data
+
+newcomb_value=299860 #km/s
+
+michelson_shifted = michelson_speed_of_light -
+np.mean(michelson_speed_of_light) + new newcomb_value
+
+def diff_from_newcomb(data, newcomb_value=299860):
+	return np.mean(data)-newcomb_value
+
+diff_from_newcomb= diff_from_newcomb(michelson_speed_of_light)
+
+bs_replicates = draw_bs_reps(michelson_shifted, np.mean, 10000)
+
+p_value= np.sum(bs_replicates <= newcomb_value)/10000
+
+
+>>>Sample
+
+
+Force B
+[0.172 0.142 0.037 0.453 0.355 0.022 0.502 0.273 0.72  0.582 0.198 0.198
+ 0.597 0.516 0.815 0.402 0.605 0.711 0.614 0.468]
+
+
+# Make an array of translated impact forces: translated_force_b
+translated_force_b = force_b - np.mean(force_b) + 0.55
+
+# Take bootstrap replicates of Frog B's translated impact forces: bs_replicates
+bs_replicates = draw_bs_reps(translated_force_b, np.mean, 10000)
+
+# Compute fraction of replicates that are less than the observed Frog B force: p
+p = np.sum(bs_replicates <= np.mean(force_b)) / 10000
+
+# Print the p-value
+print('p = ', p)
+
+
+# Compute mean of all forces: mean_force
+
+print (forces_concat)
+
+mean_force = np.mean(forces_concat)
+
+# Generate shifted arrays
+force_a_shifted = force_a - np.mean(force_a) + mean_force
+force_b_shifted = force_b - np.mean(force_b) + mean_force
+
+# Compute 10,000 bootstrap replicates from shifted arrays
+bs_replicates_a = draw_bs_reps(force_a_shifted, np.mean, 10000)
+bs_replicates_b = draw_bs_reps(force_b_shifted, np.mean, 10000)
+
+# Get replicates of difference of means: bs_replicates
+bs_replicates = bs_replicates_a - bs_replicates_b
+
+print(empirical_diff_means)
+# Compute and print p-value: p
+p = np.sum(bs_replicates >= empirical_diff_means) / len(bs_replicates)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
